@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ShaderBackground } from "./ShaderHero";
+import { GlowCard } from "@/components/ui/spotlight-card";
 import logoDark from "@/assets/logo-dark.png";
 
 export function HeroSection() {
@@ -26,6 +27,50 @@ export function HeroSection() {
         />
       </motion.div>
 
+      {/* Floating GlowCard accents — background decoration */}
+      <div className="pointer-events-none absolute inset-0 z-[11] overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 0.15, x: 0 }}
+          transition={{ delay: 1.2, duration: 2 }}
+          className="absolute -left-12 top-[15%] rotate-[-8deg]"
+        >
+          <GlowCard glowColor="purple" size="sm" className="opacity-40">
+            <div />
+          </GlowCard>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 0.12, x: 0 }}
+          transition={{ delay: 1.5, duration: 2 }}
+          className="absolute -right-8 top-[25%] rotate-[6deg]"
+        >
+          <GlowCard glowColor="blue" size="sm" className="opacity-40">
+            <div />
+          </GlowCard>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 0.1, y: 0 }}
+          transition={{ delay: 1.8, duration: 2 }}
+          className="absolute bottom-[8%] left-[8%] rotate-[4deg]"
+        >
+          <GlowCard glowColor="green" size="sm" className="opacity-30">
+            <div />
+          </GlowCard>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 0.08, y: 0 }}
+          transition={{ delay: 2.0, duration: 2 }}
+          className="absolute bottom-[12%] right-[10%] rotate-[-5deg]"
+        >
+          <GlowCard glowColor="orange" size="sm" className="opacity-30">
+            <div />
+          </GlowCard>
+        </motion.div>
+      </div>
+
       <div className="relative z-20 mx-auto max-w-5xl px-6 text-center">
         <motion.p
           initial={{ opacity: 0 }}
@@ -33,7 +78,7 @@ export function HeroSection() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mb-6 font-mono text-[11px] tracking-[0.4em] text-muted-foreground"
         >
-          MUSIC OPERATING SYSTEM
+          THE MUSIC OPERATING SYSTEM
         </motion.p>
 
         <motion.h1
@@ -42,9 +87,11 @@ export function HeroSection() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="text-glow mb-6 font-display text-5xl font-bold tracking-tight text-foreground md:text-7xl lg:text-8xl"
         >
-          THE OS FOR
+          BUILD YOUR
           <br />
-          <span className="font-light italic">MUSIC CAREERS</span>
+          <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text font-light italic text-transparent">
+            MUSIC CAREER
+          </span>
         </motion.h1>
 
         <motion.p
@@ -53,7 +100,8 @@ export function HeroSection() {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mx-auto mb-12 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground"
         >
-          Discover collaborators, use the right tools, and access real opportunities — all in one place.
+          The infrastructure layer for music. Discover collaborators, integrate AI-powered tools,
+          and access real opportunities — one unified platform for artists, producers, engineers, and labels.
         </motion.p>
 
         <motion.div
@@ -70,10 +118,10 @@ export function HeroSection() {
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </a>
           <a
-            href="/opportunities"
+            href="/tools"
             className="flex items-center gap-3 border border-border px-8 py-3 font-mono text-xs tracking-[0.15em] text-foreground transition-all hover:border-foreground"
           >
-            VIEW OPPORTUNITIES
+            BROWSE TOOLS
           </a>
         </motion.div>
 
@@ -88,7 +136,7 @@ export function HeroSection() {
             { value: "2,400+", label: "CREATORS" },
             { value: "48", label: "STATES" },
             { value: "120+", label: "STUDIOS" },
-            { value: "∞", label: "OPPORTUNITIES" },
+            { value: "8+", label: "INTEGRATED TOOLS" },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>

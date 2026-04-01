@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/wireframe-dotted-globe";
 import { CSV_STUDIO_PINS } from "@/data/csv-studios";
 import { MapSection } from "@/components/MapSection";
+import SearchComponent from "@/components/ui/animated-glowing-search-bar";
 
 const RECENT_ACTIVITY = [
   { actor: "Kael Rivers",      action: "posted a new track",              time: "2m ago"  },
@@ -534,8 +535,17 @@ export default function NetworkPage() {
 
           {/* MAP VIEW */}
           {viewMode === "map" && (
-            <div className="border border-border">
-              <MapSection embedded />
+            <div className="space-y-4">
+              <div className="flex justify-center py-2">
+                <SearchComponent
+                  placeholder="Search the map..."
+                  value={query}
+                  onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+                />
+              </div>
+              <div className="border border-border">
+                <MapSection embedded />
+              </div>
             </div>
           )}
 
