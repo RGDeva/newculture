@@ -13,6 +13,7 @@ import {
 import { CSV_STUDIO_PINS } from "@/data/csv-studios";
 import { MapSection } from "@/components/MapSection";
 import SearchComponent from "@/components/ui/animated-glowing-search-bar";
+import { AdvancedMap, type MapMarker } from "@/components/ui/interactive-map";
 
 const RECENT_ACTIVITY = [
   { actor: "Kael Rivers",      action: "posted a new track",              time: "2m ago"  },
@@ -543,8 +544,31 @@ export default function NetworkPage() {
                   onChange={(e) => { setQuery(e.target.value); setPage(1); }}
                 />
               </div>
-              <div className="border border-border">
-                <MapSection embedded />
+              <div className="border border-border rounded-lg overflow-hidden">
+                <AdvancedMap
+                  center={[39.8283, -98.5795]}
+                  zoom={4}
+                  markers={filtered
+                    .filter((c) => c.lat && c.lng)
+                    .map((c): MapMarker => ({
+                      id: c.id,
+                      position: [c.lat, c.lng],
+                      color: c.category === "artist" ? "red" : c.category === "producer" ? "blue" : c.category === "engineer" ? "green" : c.category === "studio" ? "gold" : c.category === "videographer" ? "violet" : c.category === "dj" ? "orange" : "grey",
+                      size: "medium",
+                      popup: {
+                        title: c.name,
+                        content: `${CATEGORY_LABELS[c.category]} · ${c.city}${c.state ? `, ${c.state}` : ""}${c.genres?.length ? " · " + c.genres.slice(0, 2).join(", ") : ""}`,
+                      },
+                    }))}
+                  onMarkerClick={(marker) => {
+                    const creator = filtered.find((c) => c.id === marker.id);
+                    if (creator) setSelected(creator);
+                  }}
+                  enableClustering={true}
+                  enableSearch={true}
+                  enableControls={true}
+                  style={{ height: "600px", width: "100%" }}
+                />
               </div>
             </div>
           )}
