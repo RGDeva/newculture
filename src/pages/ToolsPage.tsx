@@ -263,6 +263,22 @@ const TOOLS: Tool[] = [
     pricingModel: "subscription",
     features: ["Contact & Relationship Management", "Deal Flow Pipeline", "Automated Follow-ups", "Industry Network Mapping"],
   },
+  {
+    id: "wavewarz",
+    name: "WaveWarz",
+    url: "https://wavewarz.com",
+    tagline: "Music Battle Platform",
+    description: "Epic music battles where fans decide the winner. Upload your tracks, challenge other artists, and let the community vote. Build your reputation, grow your fanbase, and compete for prizes — all through head-to-head music battles.",
+    category: "collaboration",
+    color: "#e11d48",
+    featured: true,
+    partner: true,
+    integration: "integrated",
+    tier: "free",
+    pricingModel: "free",
+    features: ["Head-to-Head Music Battles", "Community Voting", "Artist Reputation System", "Fan Engagement & Discovery"],
+    workflowHint: "Upload track → Enter battle → Fans vote → Grow audience",
+  },
 
   // ── EXPLORE / DIRECTORY TOOLS ──────────────────────────────────────
   {
