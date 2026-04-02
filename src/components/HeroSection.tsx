@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { GlobePulse } from "@/components/ui/cobe-globe-pulse";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
@@ -99,15 +100,15 @@ export function HeroSection() {
           transition={{ delay: 1.2, duration: 0.8 }}
           className="flex flex-col items-center justify-center gap-6 sm:flex-row"
         >
-          <a href="/network">
+          <Link to="/network">
             <LiquidMetalButton label="Explore Network" />
-          </a>
-          <a href="/tools">
+          </Link>
+          <Link to="/tools">
             <LiquidMetalButton label="Browse Tools" />
-          </a>
-          <a href="/opportunities">
+          </Link>
+          <Link to="/opportunities">
             <LiquidMetalButton viewMode="icon" />
-          </a>
+          </Link>
         </motion.div>
 
         {/* Stats row */}

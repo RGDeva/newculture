@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   ArrowUpRight, Search, X, Star, ExternalLink, Zap, Lock,
   Activity, BarChart3, Layers, Bot, Users, Workflow,
@@ -778,12 +779,12 @@ export default function ToolsPage() {
             <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
               We partner with best-in-class tools for artists, producers, and labels. Apply to be featured as an integrated tool in the NewCulture ecosystem.
             </p>
-            <a
-              href="/community"
+            <Link
+              to="/community"
               className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
             >
               APPLY TO PARTNER <ExternalLink size={11} />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

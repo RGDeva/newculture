@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Search, X, ExternalLink, Instagram, Globe,
   MapPin as MapPinIcon, List, Map, Star, Zap, Phone,
@@ -649,9 +650,9 @@ export default function NetworkPage() {
             <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
               Add your profile to the map and directory. Get discovered by artists, labels, and studios actively searching the network.
             </p>
-            <a href="/community" className="border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground">
+            <Link to="/community" className="border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground">
               JOIN THE NETWORK →
-            </a>
+            </Link>
           </div>
         </div>
       </div>
