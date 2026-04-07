@@ -34,21 +34,6 @@ export function HeroSection() {
       {/* Scanline overlay */}
       <div className="scanline pointer-events-none absolute inset-0 z-[2]" />
 
-      {/* Logo watermark */}
-      <motion.div
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3, duration: 1.4 }}
-        className="pointer-events-none absolute right-[-8%] top-[-10%] z-[3] select-none"
-      >
-        <img
-          src={logoDark}
-          alt=""
-          className="h-[480px] w-[480px] object-contain opacity-[0.04]"
-          style={{ filter: "invert(1)" }}
-        />
-      </motion.div>
-
       {/* Main content */}
       <div className="relative z-20 mx-auto max-w-5xl px-6 text-center">
         <motion.p
