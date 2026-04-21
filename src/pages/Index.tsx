@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { ToolsSection } from "@/components/ToolsSection";
 import { Footer } from "@/components/Footer";
+import { mailtoHref } from "@/lib/config";
 
 function FinalCTA() {
   return (
@@ -28,8 +29,8 @@ function FinalCTA() {
           >
             APPLY <ArrowRight size={14} />
           </Link>
-          <a
-            href="mailto:hello@newculture.co"
+<a
+            href={mailtoHref}
             className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
           >
             GET IN TOUCH →

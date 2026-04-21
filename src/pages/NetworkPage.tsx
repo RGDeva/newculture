@@ -12,7 +12,6 @@ import {
   type MapPin as CreatorPin, type PinCategory,
 } from "@/components/ui/wireframe-dotted-globe";
 import { CSV_STUDIO_PINS } from "@/data/csv-studios";
-import { MapSection } from "@/components/MapSection";
 import SearchComponent from "@/components/ui/animated-glowing-search-bar";
 import { AdvancedMap, type MapMarker } from "@/components/ui/interactive-map";
 

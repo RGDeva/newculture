@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, Compass, Rocket, Sparkles } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { mailtoHref } from "@/lib/config";
 
 type Offer = {
   id: string;
@@ -242,6 +243,94 @@ NewCulture is a selective consulting + execution partner for artists,
           </div>
         </section>
 
+        {/* Case studies / in-flight work */}
+        <section className="border-t border-border px-6 py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
+                  // IN FLIGHT
+                </p>
+                <h2 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+                  Current engagements.
+                </h2>
+                <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
+                  A snapshot of active client work. Names redacted — full case
+                  studies shared on strategy calls.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-px bg-border md:grid-cols-3">
+              {[
+                {
+                  tag: "ARTIST · R&B",
+                  offer: "Execution & Growth",
+                  stage: "Single rollout · week 6 of 8",
+                  metrics: [
+                    { k: "Spotify MLS", v: "+312%" },
+                    { k: "Paid CPM", v: "$3.10" },
+                    { k: "D2F email list", v: "4,800+" },
+                  ],
+                  note: "First release via NewCulture stack. Pitched + landed on 3 editorial playlists.",
+                },
+                {
+                  tag: "PRODUCER · HIP-HOP",
+                  offer: "Development & Partnership",
+                  stage: "Quarter 2 of 4",
+                  metrics: [
+                    { k: "Placements booked", v: "6" },
+                    { k: "Beat pack revenue", v: "+$14k" },
+                    { k: "Outbound response", v: "22%" },
+                  ],
+                  note: "Beat-outreach system + publishing clean-up. Signed first co-pub deal.",
+                },
+                {
+                  tag: "ARTIST · ALT/INDIE",
+                  offer: "Strategy & Blueprint → Execution",
+                  stage: "Album campaign · planning",
+                  metrics: [
+                    { k: "Blueprint turnaround", v: "11 days" },
+                    { k: "Recommended budget", v: "$14.5k" },
+                    { k: "Execution converted", v: "Yes" },
+                  ],
+                  note: "Started with a Blueprint. Upgraded to Execution after review.",
+                },
+              ].map((c) => (
+                <div key={c.tag} className="flex flex-col bg-background p-8">
+                  <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">
+                    {c.tag}
+                  </p>
+                  <p className="mb-6 font-mono text-[10px] tracking-[0.2em] text-foreground">
+                    {c.offer}
+                  </p>
+                  <p className="mb-6 font-mono text-[11px] text-muted-foreground">
+                    {c.stage}
+                  </p>
+                  <div className="mb-6 space-y-2 border-t border-border pt-4">
+                    {c.metrics.map((m) => (
+                      <div
+                        key={m.k}
+                        className="flex items-baseline justify-between font-mono text-[10px]"
+                      >
+                        <span className="text-muted-foreground/70">{m.k}</span>
+                        <span className="text-foreground">{m.v}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-auto font-mono text-[11px] italic leading-relaxed text-muted-foreground">
+                    {c.note}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-6 font-mono text-[10px] tracking-[0.25em] text-muted-foreground/40">
+              METRICS AS OF LATEST REPORTING PERIOD · SHARED UNDER NDA ON CALL
+            </p>
+          </div>
+        </section>
+
         {/* Final CTA */}
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto max-w-3xl text-center">
@@ -259,8 +348,8 @@ NewCulture is a selective consulting + execution partner for artists,
               >
                 APPLY <ArrowRight size={14} />
               </Link>
-              <a
-                href="mailto:hello@newculture.co"
+<a
+                href={mailtoHref}
                 className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
               >
                 GET IN TOUCH →

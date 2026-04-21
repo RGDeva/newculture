@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GlobePulse } from "@/components/ui/cobe-globe-pulse";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
+import { mailtoHref } from "@/lib/config";
 
 const MORPHING_WORDS = [
   "NEXT RELEASE",
@@ -97,7 +98,7 @@ Selective consulting + execution for artists, producers, and creative operators.
           <Link to="/apply">
             <LiquidMetalButton label="Apply" />
           </Link>
-          <a href="mailto:hello@newculture.co">
+<a href={mailtoHref}>
             <LiquidMetalButton label="Get in touch" />
           </a>
         </motion.div>

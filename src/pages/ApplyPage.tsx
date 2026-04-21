@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
+import { CAL_STRATEGY_URL, mailtoHref } from "@/lib/config";
 
 // ── Schema (Supabase-ready) ───────────────────────────────────────────────
 type Role = "artist" | "producer" | "engineer" | "manager" | "other";
@@ -304,7 +306,7 @@ function SuccessStrong({ artistName }: { artistName: string }) {
           engagement would look for you.
         </p>
         <a
-          href="https://cal.com/newculture/strategy"
+          href={CAL_STRATEGY_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 border border-foreground bg-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
@@ -437,7 +439,7 @@ function SuccessLight({ artistName }: { artistName: string }) {
       </p>
       <div className="flex flex-wrap gap-4">
         <a
-          href="mailto:hello@newculture.co"
+          href={mailtoHref}
           className="font-mono text-[11px] tracking-[0.25em] text-foreground underline underline-offset-[6px] hover:opacity-70"
         >
           GET IN TOUCH →
@@ -524,21 +526,63 @@ export default function ApplyPage() {
     );
   }, [data]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isValid) return;
+    if (!isValid || submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
+
     const payload: ApplicationPayload = {
       ...data,
       musicLinks: data.musicLinks.filter((l) => l.trim().length > 0),
       submittedAt: new Date().toISOString(),
     };
     const { tier, score } = scoreApplication(payload);
+
+    // 1) Try Supabase first (if configured)
+    if (supabase) {
+      try {
+        const { error } = await supabase.from("applications").insert({
+          full_name: payload.fullName,
+          email: payload.email,
+          artist_name: payload.artistName,
+          role: payload.role,
+          music_links: payload.musicLinks,
+          stage: payload.stage,
+          target_release_date: payload.targetReleaseDate || null,
+          support_areas: payload.supportAreas,
+          engagement: payload.engagement,
+          assets: payload.assets,
+          timeframe: payload.timeframe,
+          bottleneck: payload.bottleneck,
+          budget: payload.budget,
+          ready_thirty_days: payload.readyThirtyDays,
+          notes: payload.notes || null,
+          score,
+          tier,
+          offer: payload.offer || null,
+          interest: searchParams.get("interest"),
+        });
+        if (error) throw error;
+      } catch (err: any) {
+        // Fall through to localStorage but record the error for display
+        // so we don't silently drop leads in prod.
+        setSubmitError(err?.message ?? "Submission could not be saved to server.");
+      }
+    }
+
+    // 2) Always keep a local copy as backup
     try {
       const key = "nc_applications";
       const existing = JSON.parse(localStorage.getItem(key) || "[]");
       existing.push({ ...payload, _tier: tier, _score: score });
       localStorage.setItem(key, JSON.stringify(existing.slice(-500)));
     } catch {}
+
+    setSubmitting(false);
     setSubmitted(tier);
   };
 
@@ -846,24 +890,29 @@ export default function ApplyPage() {
 
             {/* Submit */}
             <div className="border-t border-border pt-8">
-              <button
+<button
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || submitting}
                 className="group inline-flex w-full items-center justify-center gap-3 border border-foreground bg-foreground py-4 font-mono text-xs tracking-[0.2em] text-background transition-all hover:bg-transparent hover:text-foreground disabled:cursor-not-allowed disabled:border-border disabled:bg-transparent disabled:text-muted-foreground/40 sm:w-auto sm:px-12"
               >
-                SUBMIT APPLICATION
+                {submitting ? "SUBMITTING…" : "SUBMIT APPLICATION"}
                 <ArrowRight
                   size={14}
                   className="transition-transform group-hover:translate-x-1"
                 />
               </button>
+              {submitError && (
+                <p className="mt-3 font-mono text-[10px] tracking-[0.15em] text-destructive">
+                  {submitError}
+                </p>
+              )}
               <p className="mt-4 font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50">
                 PERSONALLY REVIEWED · 48-HOUR RESPONSE · SELECTIVE ONBOARDING
               </p>
               <p className="mt-2 font-mono text-[10px] tracking-[0.2em] text-muted-foreground/40">
                 NOT THE RIGHT FIT FOR AN APPLICATION?{" "}
-                <a
-                  href="mailto:hello@newculture.co"
+<a
+                  href={mailtoHref}
                   className="text-muted-foreground underline underline-offset-[4px] hover:text-foreground"
                 >
                   GET IN TOUCH →
