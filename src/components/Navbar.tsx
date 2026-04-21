@@ -2,16 +2,17 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import {
-  Wrench, Network, Zap, Menu, X, Home,
+  Wrench, Network, Send, Menu, X, Home, Layers,
 } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import type { NavItem } from "@/components/ui/limelight-nav";
 
 const NAV_ITEMS: (NavItem & { href: string })[] = [
-  { id: "home",          href: "/",               icon: <Home />,     label: "Home" },
-  { id: "network",       href: "/network",         icon: <Network />,  label: "Network" },
-  { id: "opportunities", href: "/opportunities",   icon: <Zap />,      label: "Opportunities" },
-  { id: "tools",         href: "/tools",           icon: <Wrench />,   label: "Tools" },
+  { id: "home",     href: "/",         icon: <Home />,    label: "Home" },
+  { id: "services", href: "/services", icon: <Layers />,  label: "Services" },
+  { id: "tools",    href: "/tools",    icon: <Wrench />,  label: "Tools" },
+  { id: "network",  href: "/network",  icon: <Network />, label: "Network" },
+  { id: "apply",    href: "/apply",    icon: <Send />,    label: "Apply" },
 ];
 
 export function Navbar() {
@@ -71,10 +72,10 @@ export function Navbar() {
         {/* Right side: CTA + mobile burger */}
         <div className="flex items-center gap-3 flex-shrink-0">
           <Link
-            to="/community"
+            to="/apply"
             className="hidden sm:inline-flex font-mono text-[9px] tracking-[0.2em] border border-foreground bg-foreground text-background px-4 py-2 transition-all hover:bg-transparent hover:text-foreground"
           >
-            JOIN
+            APPLY
           </Link>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}

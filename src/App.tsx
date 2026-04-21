@@ -10,6 +10,9 @@ import MapPage from "./pages/MapPage.tsx";
 import NetworkPage from "./pages/NetworkPage.tsx";
 import CommunityPage from "./pages/CommunityPage.tsx";
 import OpportunitiesPage from "./pages/OpportunitiesPage.tsx";
+import ServicesPage from "./pages/ServicesPage.tsx";
+import ApplyPage from "./pages/ApplyPage.tsx";
+import ProjectsPage from "./pages/ProjectsPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/network" element={<NetworkPage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/opportunities" element={<OpportunitiesPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/apply" element={<ApplyPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

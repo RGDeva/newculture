@@ -1,13 +1,38 @@
 import { motion } from "framer-motion";
-import { Mic, Search, Users, Headphones, MapPin, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Compass, Rocket, Sparkles } from "lucide-react";
 
-const services = [
-  { icon: Search, title: "STUDIO FINDER", desc: "Locate premium recording studios with real-time availability and booking." },
-  { icon: Users, title: "PRODUCER MATCH", desc: "AI-powered matching connecting artists with producers by genre and style." },
-  { icon: Mic, title: "SESSION BOOKING", desc: "Schedule recording sessions, mixing, and mastering with vetted engineers." },
-  { icon: MapPin, title: "LOCATION NETWORK", desc: "Pin yourself on the global map and discover collaborators nearby." },
-  { icon: Headphones, title: "DISTRIBUTION", desc: "Streamlined release pipeline to all major streaming platforms." },
-  { icon: Zap, title: "ACCELERATOR", desc: "12-week programs with mentorship, funding, and industry placement." },
+const OFFERS = [
+  {
+    id: "blueprint",
+    icon: Compass,
+    eyebrow: "01 · RELEASE BLUEPRINT",
+    name: "Release Blueprint",
+    pitch: "A scoped plan for your next release — strategy audit, rollout calendar, and the exact stack to use.",
+    outcome: "Execute it yourself, or hand it to us.",
+    color: "#22c55e",
+    cta: { label: "Get a Blueprint", to: "/apply?offer=blueprint" },
+  },
+  {
+    id: "execution",
+    icon: Rocket,
+    eyebrow: "02 · RELEASE EXECUTION",
+    name: "Release Execution",
+    pitch: "End-to-end rollout: mix/master, assets, distribution, paid media, PR, direct-to-fan setup.",
+    outcome: "A real release that produces real cashflow.",
+    color: "#f59e0b",
+    cta: { label: "Apply for Release Support", to: "/apply?offer=execution" },
+  },
+  {
+    id: "development",
+    icon: Sparkles,
+    eyebrow: "03 · ARTIST DEVELOPMENT",
+    name: "Artist Development",
+    pitch: "6–12 month arcs for committed artists. Roadmap, growth retainer, IP management, advisory.",
+    outcome: "A sustainable independent operation.",
+    color: "#a855f7",
+    cta: { label: "Talk to NewCulture", to: "/apply?offer=development" },
+  },
 ];
 
 export function ServicesSection() {
@@ -18,40 +43,100 @@ export function ServicesSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16"
+          className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
         >
-          <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
-            // INFRASTRUCTURE
-          </p>
-          <h2 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Services & Tools
-          </h2>
+          <div>
+            <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
+              // WHAT WE DO
+            </p>
+            <h2 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Three ways to work with us.
+            </h2>
+            <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
+              Productized label-style support for independent artists. Custom-scoped,
+              budget-based, selective onboarding.
+            </p>
+          </div>
+          <Link
+            to="/services"
+            className="group inline-flex items-center gap-2 self-start font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] transition-colors hover:text-foreground md:self-end"
+          >
+            SEE ALL SERVICES
+            <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+          </Link>
         </motion.div>
 
-        <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, i) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="group bg-background p-8 transition-colors hover:bg-card"
-            >
-              <service.icon
-                size={20}
-                strokeWidth={1}
-                className="mb-6 text-muted-foreground transition-colors group-hover:text-foreground"
-              />
-              <h3 className="mb-3 font-mono text-xs font-semibold tracking-[0.2em] text-foreground">
-                {service.title}
-              </h3>
-              <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
-                {service.desc}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid gap-px border border-border bg-border md:grid-cols-3">
+          {OFFERS.map((offer, i) => {
+            const Icon = offer.icon;
+            return (
+              <motion.div
+                key={offer.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative flex flex-col bg-background p-8 transition-colors hover:bg-card"
+              >
+                <div className="h-0.5 w-12" style={{ background: offer.color }} />
+
+                <div
+                  className="mt-8 mb-6 inline-flex h-11 w-11 items-center justify-center border"
+                  style={{ borderColor: offer.color, color: offer.color }}
+                >
+                  <Icon size={18} strokeWidth={1.25} />
+                </div>
+
+                <p
+                  className="mb-3 font-mono text-[9px] tracking-[0.3em]"
+                  style={{ color: offer.color }}
+                >
+                  {offer.eyebrow}
+                </p>
+
+                <h3 className="mb-4 font-display text-2xl font-bold tracking-tight text-foreground">
+                  {offer.name}
+                </h3>
+
+                <p className="mb-5 flex-1 font-mono text-[12px] leading-relaxed text-muted-foreground">
+                  {offer.pitch}
+                </p>
+
+                <p className="mb-8 font-mono text-[11px] italic leading-relaxed text-foreground">
+                  {offer.outcome}
+                </p>
+
+                <Link
+                  to={offer.cta.to}
+                  className="mt-auto flex items-center justify-between border border-border px-4 py-3 font-mono text-[10px] tracking-[0.2em] text-muted-foreground transition-all hover:text-foreground"
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = offer.color)}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = "hsl(var(--border))")}
+                >
+                  <span>{offer.cta.label.toUpperCase()}</span>
+                  <ArrowRight size={12} />
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* Bottom strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6"
+        >
+          <p className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground/50">
+            CUSTOM-SCOPED · BUDGET-BASED · SELECTIVE ONBOARDING
+          </p>
+          <Link
+            to="/apply"
+            className="font-mono text-[10px] tracking-[0.25em] text-foreground underline underline-offset-[6px] hover:opacity-70"
+          >
+            APPLY FOR RELEASE SUPPORT →
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

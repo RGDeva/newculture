@@ -408,16 +408,26 @@ export default function NetworkPage() {
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// CREATOR NETWORK</p>
+                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// REFERENCE DIRECTORY</p>
                 <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">Network</h1>
-                <p className="mt-2 font-mono text-xs text-muted-foreground">
-                  {ALL_NETWORK.length.toLocaleString()} creators · studios, artists, producers, engineers &amp; more
+                <p className="mt-2 max-w-lg font-mono text-xs text-muted-foreground">
+                  {ALL_NETWORK.length.toLocaleString()} studios, engineers, producers, and creators we've worked with or reference when scoping client releases.
                 </p>
               </div>
-              {/* Live ticker */}
-              <div className="w-full max-w-xs border border-border bg-card px-4 py-2.5">
-                <p className="mb-1 font-mono text-[7px] tracking-[0.3em] text-muted-foreground/50">LIVE ACTIVITY</p>
-                <ActivityTicker />
+              {/* Service CTA rail */}
+              <div className="w-full max-w-xs border border-foreground bg-foreground/5 px-4 py-3">
+                <p className="mb-1 font-mono text-[9px] tracking-[0.25em] text-foreground">
+                  NEED TO BUILD YOUR RELEASE TEAM?
+                </p>
+                <p className="mb-3 font-mono text-[10px] leading-relaxed text-muted-foreground">
+                  We assemble the right engineers, producers, and providers as part of Release Execution.
+                </p>
+                <Link
+                  to="/apply"
+                  className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.2em] text-foreground underline underline-offset-[5px] hover:opacity-70"
+                >
+                  APPLY FOR SUPPORT →
+                </Link>
               </div>
             </div>
           </div>
@@ -645,13 +655,13 @@ export default function NetworkPage() {
 
           {/* CTA */}
           <div className="mt-16 border border-border bg-card p-8 text-center">
-            <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">NOT LISTED YET?</p>
-            <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Join the Network</h3>
+            <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">WORKING WITH US?</p>
+            <h3 className="mb-3 font-display text-2xl font-bold text-foreground">We build your team for you.</h3>
             <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-              Add your profile to the map and directory. Get discovered by artists, labels, and studios actively searching the network.
+              Every client release is matched with the right producers, engineers, and providers from our vetted network. You don't sort through the directory — we do.
             </p>
-            <Link to="/community" className="border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground">
-              JOIN THE NETWORK →
+            <Link to="/apply" className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground">
+              APPLY FOR RELEASE SUPPORT →
             </Link>
           </div>
         </div>

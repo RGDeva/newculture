@@ -458,6 +458,12 @@ function ToolCard({ tool, onOpen }: { tool: Tool; onOpen: (t: Tool) => void }) {
         )}
 
         {/* CTAs */}
+        <Link
+          to={`/apply?interest=${tool.id}`}
+          className="mb-2 flex items-center justify-between border border-foreground bg-foreground/0 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-foreground transition-all hover:bg-foreground hover:text-background"
+        >
+          <span>LET US HANDLE THIS →</span>
+        </Link>
         <div className="flex gap-2">
           <a
             href={tool.url}
@@ -604,20 +610,19 @@ export default function ToolsPage() {
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// TOOL ECOSYSTEM</p>
-                <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">Tools</h1>
-                <p className="mt-3 max-w-xl font-mono text-xs text-muted-foreground">
-                  Integrated partner tools, AI-powered workflows, and a curated directory — everything you need to build, mix, distribute, and monetize.
+                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// OUR RECOMMENDED STACK</p>
+                <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">The operating stack we use with clients.</h1>
+                <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
+                  The providers, tools, and systems we deploy to finish, launch, and monetize releases.
+                  We can handle any of these for you as part of Release Execution.
                 </p>
               </div>
-              <div className="flex flex-col gap-1 text-right">
-                <p className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/50">
-                  {TOOLS.filter(t => t.integration === "integrated").length} INTEGRATED · {TOOLS.filter(t => t.integration === "directory").length} DIRECTORY
-                </p>
-                <p className="font-mono text-[9px] text-muted-foreground/50">
-                  {TOOLS.filter(t => t.mcpSchema).length} MCP-compatible · {TOOLS.filter(t => t.apiReady).length} API-ready
-                </p>
-              </div>
+              <Link
+                to="/apply"
+                className="inline-flex items-center gap-2 self-start border border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground md:self-end"
+              >
+                APPLY FOR RELEASE SUPPORT →
+              </Link>
             </div>
           </div>
         </div>
@@ -679,15 +684,34 @@ export default function ToolsPage() {
             </div>
           </div>
 
+          {/* Conversion banner — persistent */}
+          <div className="mb-8 flex flex-col gap-3 border border-foreground bg-foreground/5 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <Zap size={14} className="mt-0.5 flex-shrink-0 text-foreground" />
+              <div>
+                <p className="font-mono text-[11px] font-bold text-foreground">Overwhelmed by the stack?</p>
+                <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                  We handle all of this for clients. Mix, master, rollout, distribution, direct-to-fan — operated end-to-end.
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/apply"
+              className="inline-flex items-center gap-2 border border-foreground bg-foreground px-4 py-2 font-mono text-[10px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
+            >
+              APPLY FOR SUPPORT →
+            </Link>
+          </div>
+
           {/* Tab description */}
           {tab === "integrated" && (
             <div className="mb-8 border border-dashed border-border bg-card/50 px-5 py-4">
               <div className="flex items-start gap-3">
                 <Zap size={14} className="mt-0.5 flex-shrink-0 text-[#f59e0b]" />
                 <div>
-                  <p className="font-mono text-[10px] font-bold text-foreground">Deeply Integrated Partner Tools</p>
+                  <p className="font-mono text-[10px] font-bold text-foreground">Tools we actively run for clients</p>
                   <p className="mt-1 font-mono text-[9px] text-muted-foreground">
-                    These tools are vetted, integrated, and monetizable through NewCulture. They connect to workflows, support MCP agents, and are part of the creator OS.
+                    These providers are built into our Release Execution and Artist Development programs. When we run your release, we operate these on your behalf.
                   </p>
                 </div>
               </div>
@@ -788,19 +812,34 @@ export default function ToolsPage() {
             </div>
           </div>
 
-          {/* Partner CTA */}
-          <div className="mt-12 border border-border bg-card p-8 text-center">
-            <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">HAVE A TOOL FOR THE NETWORK?</p>
-            <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Become a Partner</h3>
-            <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-              We partner with best-in-class tools for artists, producers, and labels. Apply to be featured as an integrated tool in the NewCulture ecosystem.
-            </p>
-            <Link
-              to="/community"
-              className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
-            >
-              APPLY TO PARTNER <ExternalLink size={11} />
-            </Link>
+          {/* Conversion CTA — service-led */}
+          <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2">
+            <div className="bg-background p-8 text-center">
+              <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">NOT SURE WHAT YOUR RELEASE NEEDS?</p>
+              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Get a Release Blueprint</h3>
+              <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
+                We'll audit your release, scope the right tools, and send you a written rollout plan. You can execute it yourself — or hand it to us.
+              </p>
+              <Link
+                to="/apply?offer=blueprint"
+                className="inline-flex items-center gap-2 border border-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-foreground transition-all hover:bg-foreground hover:text-background"
+              >
+                GET A BLUEPRINT →
+              </Link>
+            </div>
+            <div className="bg-background p-8 text-center">
+              <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">WANT US TO RUN IT FOR YOU?</p>
+              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Apply for Release Support</h3>
+              <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
+                We take on a limited number of releases each quarter. Mix/master, assets, paid rollout, distribution, and direct-to-fan — operated end-to-end.
+              </p>
+              <Link
+                to="/apply?offer=execution"
+                className="inline-flex items-center gap-2 border border-foreground bg-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
+              >
+                APPLY FOR SUPPORT →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -3,14 +3,21 @@ import { Link } from "react-router-dom";
 import { GlobePulse } from "@/components/ui/cobe-globe-pulse";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
-import logoDark from "@/assets/logo-dark.png";
 
 const MORPHING_WORDS = [
-  "MUSIC CAREER",
-  "CREATIVE EMPIRE",
   "NEXT RELEASE",
-  "ARTIST NETWORK",
-  "SOUND LEGACY",
+  "ROLLOUT PLAN",
+  "FAN ECONOMY",
+  "CREATIVE BUSINESS",
+];
+
+const PARTNER_STACK = [
+  "ROEX",
+  "WAVI",
+  "DREAMSTER",
+  "TEAM ROLLOUTS",
+  "RECORD FINANCIAL",
+  "RELATIONL",
 ];
 
 export function HeroSection() {
@@ -42,7 +49,7 @@ export function HeroSection() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mb-6 font-mono text-[11px] tracking-[0.4em] text-muted-foreground"
         >
-          THE MUSIC OPERATING SYSTEM
+          NEWCULTURE · LABEL-SERVICES FOR INDEPENDENT ARTISTS
         </motion.p>
 
         {/* Static heading */}
@@ -52,7 +59,7 @@ export function HeroSection() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="text-glow mb-2 font-display text-5xl font-bold tracking-tight text-foreground md:text-7xl lg:text-8xl"
         >
-          BUILD YOUR
+          WE RUN YOUR
         </motion.h1>
 
         {/* Morphing text line */}
@@ -72,10 +79,11 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0, duration: 0.8 }}
-          className="mx-auto mb-12 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground"
+          className="mx-auto mb-12 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground"
         >
-          The infrastructure layer for music. Discover collaborators, integrate AI-powered tools,
-          and access real opportunities — one unified platform.
+          Label-style release support for independent artists.
+          We finish, launch, and monetize your music — strategy, mix/master, rollout,
+          and direct-to-fan systems — without the traditional label deal.
         </motion.p>
 
         {/* Liquid metal CTA buttons */}
@@ -85,35 +93,49 @@ export function HeroSection() {
           transition={{ delay: 1.2, duration: 0.8 }}
           className="flex flex-col items-center justify-center gap-6 sm:flex-row"
         >
-          <Link to="/network">
-            <LiquidMetalButton label="Explore Network" />
+          <Link to="/apply">
+            <LiquidMetalButton label="Apply for Release Support" />
           </Link>
-          <Link to="/tools">
-            <LiquidMetalButton label="Browse Tools" />
-          </Link>
-          <Link to="/opportunities">
-            <LiquidMetalButton viewMode="icon" />
+          <Link to="/services">
+            <LiquidMetalButton label="Get a Release Blueprint" />
           </Link>
         </motion.div>
 
-        {/* Stats row */}
+        {/* Secondary text CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-8"
+          transition={{ delay: 1.35, duration: 0.8 }}
+          className="mt-6"
         >
-          {[
-            { value: "2,400+", label: "CREATORS" },
-            { value: "48", label: "STATES" },
-            { value: "120+", label: "STUDIOS" },
-            { value: "8+", label: "INTEGRATED TOOLS" },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
-              <p className="font-mono text-[8px] tracking-[0.3em] text-muted-foreground/60">{s.label}</p>
-            </div>
-          ))}
+          <Link
+            to="/apply"
+            className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground/70 underline underline-offset-[6px] transition-colors hover:text-foreground"
+          >
+            TALK TO NEWCULTURE →
+          </Link>
+        </motion.div>
+
+        {/* Partner stack strip — real social proof */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+          className="mt-20 flex flex-col items-center gap-4"
+        >
+          <p className="font-mono text-[9px] tracking-[0.35em] text-muted-foreground/50">
+            — POWERED BY OUR OPERATING STACK —
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {PARTNER_STACK.map((p) => (
+              <span
+                key={p}
+                className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground/80"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
         {/* HUD coordinates */}
@@ -123,7 +145,7 @@ export function HeroSection() {
           transition={{ delay: 1.6, duration: 1 }}
           className="mt-10 font-mono text-[10px] tracking-[0.3em] text-muted-foreground/50"
         >
-          SYS.ONLINE — v3.0 — {new Date().getFullYear()}
+          SELECTIVE ONBOARDING · NEWCULTURE · {new Date().getFullYear()}
         </motion.div>
       </div>
     </section>
