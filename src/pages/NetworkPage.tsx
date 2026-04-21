@@ -417,16 +417,16 @@ export default function NetworkPage() {
               {/* Service CTA rail */}
               <div className="w-full max-w-xs border border-foreground bg-foreground/5 px-4 py-3">
                 <p className="mb-1 font-mono text-[9px] tracking-[0.25em] text-foreground">
-                  NEED TO BUILD YOUR RELEASE TEAM?
+                  NEED A TEAM BUILT AROUND YOU?
                 </p>
                 <p className="mb-3 font-mono text-[10px] leading-relaxed text-muted-foreground">
-                  We assemble the right engineers, producers, and providers as part of Release Execution.
+                  We assemble the right engineers, producers, and providers around each client engagement.
                 </p>
                 <Link
                   to="/apply"
                   className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.2em] text-foreground underline underline-offset-[5px] hover:opacity-70"
                 >
-                  APPLY FOR SUPPORT →
+                  APPLY →
                 </Link>
               </div>
             </div>
@@ -661,7 +661,7 @@ export default function NetworkPage() {
               Every client release is matched with the right producers, engineers, and providers from our vetted network. You don't sort through the directory — we do.
             </p>
             <Link to="/apply" className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground">
-              APPLY FOR RELEASE SUPPORT →
+              APPLY →
             </Link>
           </div>
         </div>

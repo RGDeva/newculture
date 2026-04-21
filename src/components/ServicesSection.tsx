@@ -4,34 +4,34 @@ import { ArrowRight, Compass, Rocket, Sparkles } from "lucide-react";
 
 const OFFERS = [
   {
-    id: "blueprint",
+    id: "strategy",
     icon: Compass,
-    eyebrow: "01 · RELEASE BLUEPRINT",
-    name: "Release Blueprint",
-    pitch: "A scoped plan for your next release — strategy audit, rollout calendar, and the exact stack to use.",
+    eyebrow: "01 · STRATEGY & BLUEPRINT",
+    name: "Strategy & Blueprint",
+    pitch: "A scoped plan for your next move — release, growth, placements, or positioning. Strategy audit + written roadmap + the exact stack to use.",
     outcome: "Execute it yourself, or hand it to us.",
     color: "#22c55e",
-    cta: { label: "Get a Blueprint", to: "/apply?offer=blueprint" },
+    cta: { label: "Apply", to: "/apply?offer=strategy" },
   },
   {
     id: "execution",
     icon: Rocket,
-    eyebrow: "02 · RELEASE EXECUTION",
-    name: "Release Execution",
-    pitch: "End-to-end rollout: mix/master, assets, distribution, paid media, PR, direct-to-fan setup.",
-    outcome: "A real release that produces real cashflow.",
+    eyebrow: "02 · EXECUTION & GROWTH",
+    name: "Execution & Growth",
+    pitch: "Done-for-you operation: release rollouts, paid growth, creative, placements, direct-to-fan — run end-to-end by our team.",
+    outcome: "Real outcomes, reported weekly.",
     color: "#f59e0b",
-    cta: { label: "Apply for Release Support", to: "/apply?offer=execution" },
+    cta: { label: "Apply", to: "/apply?offer=execution" },
   },
   {
-    id: "development",
+    id: "partnership",
     icon: Sparkles,
-    eyebrow: "03 · ARTIST DEVELOPMENT",
-    name: "Artist Development",
-    pitch: "6–12 month arcs for committed artists. Roadmap, growth retainer, IP management, advisory.",
+    eyebrow: "03 · DEVELOPMENT & PARTNERSHIP",
+    name: "Development & Partnership",
+    pitch: "Long-term arcs for artists, producers, and operators committed to the work. Roadmap, growth retainer, IP management, advisory.",
     outcome: "A sustainable independent operation.",
     color: "#a855f7",
-    cta: { label: "Talk to NewCulture", to: "/apply?offer=development" },
+    cta: { label: "Apply", to: "/apply?offer=partnership" },
   },
 ];
 
@@ -47,14 +47,14 @@ export function ServicesSection() {
         >
           <div>
             <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
-              // WHAT WE DO
+              // HOW WE WORK
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Three ways to work with us.
             </h2>
             <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-              Productized label-style support for independent artists. Custom-scoped,
-              budget-based, selective onboarding.
+              Productized engagements for artists, producers, and operators.
+              Custom-scoped, budget-based, selective onboarding.
             </p>
           </div>
           <Link
@@ -134,7 +134,7 @@ export function ServicesSection() {
             to="/apply"
             className="font-mono text-[10px] tracking-[0.25em] text-foreground underline underline-offset-[6px] hover:opacity-70"
           >
-            APPLY FOR RELEASE SUPPORT →
+            APPLY →
           </Link>
         </motion.div>
       </div>

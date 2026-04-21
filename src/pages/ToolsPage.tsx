@@ -613,15 +613,15 @@ export default function ToolsPage() {
                 <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// OUR RECOMMENDED STACK</p>
                 <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">The operating stack we use with clients.</h1>
                 <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
-                  The providers, tools, and systems we deploy to finish, launch, and monetize releases.
-                  We can handle any of these for you as part of Release Execution.
+The providers, tools, and systems we deploy to finish, launch, grow,
+                  and monetize music. We can handle any of these as part of Execution & Growth.
                 </p>
               </div>
               <Link
                 to="/apply"
                 className="inline-flex items-center gap-2 self-start border border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground md:self-end"
               >
-                APPLY FOR RELEASE SUPPORT →
+APPLY →
               </Link>
             </div>
           </div>
@@ -699,7 +699,7 @@ export default function ToolsPage() {
               to="/apply"
               className="inline-flex items-center gap-2 border border-foreground bg-foreground px-4 py-2 font-mono text-[10px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
             >
-              APPLY FOR SUPPORT →
+APPLY →
             </Link>
           </div>
 
@@ -815,29 +815,29 @@ export default function ToolsPage() {
           {/* Conversion CTA — service-led */}
           <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2">
             <div className="bg-background p-8 text-center">
-              <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">NOT SURE WHAT YOUR RELEASE NEEDS?</p>
-              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Get a Release Blueprint</h3>
+<p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">NOT SURE WHERE TO START?</p>
+              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Get a Blueprint</h3>
               <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-                We'll audit your release, scope the right tools, and send you a written rollout plan. You can execute it yourself — or hand it to us.
+                We'll audit your position, scope the right stack, and send you a written plan. You can execute it yourself — or hand it to us.
               </p>
-              <Link
-                to="/apply?offer=blueprint"
+<Link
+                to="/apply?offer=strategy"
                 className="inline-flex items-center gap-2 border border-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-foreground transition-all hover:bg-foreground hover:text-background"
               >
                 GET A BLUEPRINT →
               </Link>
             </div>
             <div className="bg-background p-8 text-center">
-              <p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">WANT US TO RUN IT FOR YOU?</p>
-              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Apply for Release Support</h3>
+<p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">WANT US TO RUN IT FOR YOU?</p>
+              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Apply to work with us</h3>
               <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-                We take on a limited number of releases each quarter. Mix/master, assets, paid rollout, distribution, and direct-to-fan — operated end-to-end.
+                We take on a limited number of clients each quarter. Release, growth, creative, placements, direct-to-fan — operated end-to-end.
               </p>
-              <Link
+<Link
                 to="/apply?offer=execution"
                 className="inline-flex items-center gap-2 border border-foreground bg-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
               >
-                APPLY FOR SUPPORT →
+                APPLY →
               </Link>
             </div>
           </div>

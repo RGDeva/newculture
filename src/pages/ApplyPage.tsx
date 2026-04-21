@@ -15,12 +15,16 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 // ── Schema (Supabase-ready) ───────────────────────────────────────────────
-type ReleaseStage =
+type Role = "artist" | "producer" | "engineer" | "manager" | "other";
+
+type Stage =
   | "writing"
   | "recording"
   | "mixing"
   | "mastered-unreleased"
-  | "released-no-traction";
+  | "released-no-traction"
+  | "established-scaling"
+  | "not-release-specific";
 
 type BudgetBand =
   | "under-300"
@@ -29,23 +33,57 @@ type BudgetBand =
   | "1500-3000"
   | "3000-plus";
 
-const HELP_OPTIONS = [
-  "Finish the song (mix / master)",
-  "Artwork & creative assets",
-  "Distribution",
-  "Paid rollout / marketing",
-  "Press & playlist",
-  "Direct-to-fan monetization",
-  "Strategy / blueprint",
-] as const;
-type HelpNeeded = (typeof HELP_OPTIONS)[number];
+type Engagement = "done-for-you" | "strategic" | "both";
+type Assets = "solo" | "some" | "full";
+type Timeframe = "immediate" | "long-term" | "exploring";
 
-const STAGE_OPTIONS: { value: ReleaseStage; label: string }[] = [
+const ROLE_OPTIONS: { value: Role; label: string }[] = [
+  { value: "artist", label: "Artist" },
+  { value: "producer", label: "Producer" },
+  { value: "engineer", label: "Engineer" },
+  { value: "manager", label: "Manager / Operator" },
+  { value: "other", label: "Other" },
+];
+
+const STAGE_OPTIONS: { value: Stage; label: string }[] = [
   { value: "writing", label: "Writing" },
-  { value: "recording", label: "Recording" },
-  { value: "mixing", label: "Mixing" },
+  { value: "recording", label: "Recording / producing" },
+  { value: "mixing", label: "Mixing / mastering" },
   { value: "mastered-unreleased", label: "Mastered, unreleased" },
-  { value: "released-no-traction", label: "Released, no traction" },
+  { value: "released-no-traction", label: "Released, need traction" },
+  { value: "established-scaling", label: "Established, scaling" },
+  { value: "not-release-specific", label: "Not release-specific" },
+];
+
+const SUPPORT_OPTIONS = [
+  "Release planning & rollout",
+  "Mixing / mastering / recording",
+  "Paid growth & fan acquisition",
+  "Content & creative",
+  "Placements & beat outreach",
+  "Publishing / royalties / sync",
+  "Direct-to-fan monetization",
+  "Team & operations",
+  "Strategy & planning",
+] as const;
+type Support = (typeof SUPPORT_OPTIONS)[number];
+
+const ENGAGEMENT_OPTIONS: { value: Engagement; label: string }[] = [
+  { value: "done-for-you", label: "Done-for-you execution" },
+  { value: "strategic", label: "Strategic guidance" },
+  { value: "both", label: "Both" },
+];
+
+const ASSETS_OPTIONS: { value: Assets; label: string }[] = [
+  { value: "solo", label: "Solo / building from zero" },
+  { value: "some", label: "Some assets or team" },
+  { value: "full", label: "Full team & assets" },
+];
+
+const TIMEFRAME_OPTIONS: { value: Timeframe; label: string }[] = [
+  { value: "immediate", label: "Immediate project (next 30 days)" },
+  { value: "long-term", label: "Long-term partnership" },
+  { value: "exploring", label: "Exploring / not sure yet" },
 ];
 
 const BUDGET_OPTIONS: { value: BudgetBand; label: string }[] = [
@@ -61,10 +99,14 @@ interface ApplicationPayload {
   fullName: string;
   email: string;
   artistName: string;
+  role: Role | "";
   musicLinks: string[];
-  releaseStage: ReleaseStage | "";
-  helpNeeded: HelpNeeded[];
+  stage: Stage | "";
   targetReleaseDate: string;
+  supportAreas: Support[];
+  engagement: Engagement | "";
+  assets: Assets | "";
+  timeframe: Timeframe | "";
   bottleneck: string;
   budget: BudgetBand | "";
   readyThirtyDays: boolean | null;
@@ -89,15 +131,20 @@ function scoreApplication(a: ApplicationPayload): { score: number; tier: FitTier
 
   if (a.readyThirtyDays === true) score += 1;
 
-  if (
-    a.releaseStage === "mixing" ||
-    a.releaseStage === "mastered-unreleased" ||
-    a.releaseStage === "released-no-traction"
-  )
-    score += 1;
+  if (a.timeframe === "immediate" || a.timeframe === "long-term") score += 1;
+
+  const advancedStage =
+    a.stage === "mixing" ||
+    a.stage === "mastered-unreleased" ||
+    a.stage === "released-no-traction" ||
+    a.stage === "established-scaling";
+  const hasAssets = a.assets === "some" || a.assets === "full";
+  if (advancedStage || hasAssets) score += 1;
+
+  if (a.engagement === "done-for-you" || a.engagement === "both") score += 1;
 
   let tier: FitTier = "light";
-  if (score >= 5) tier = "strong";
+  if (score >= 6) tier = "strong";
   else if (score >= 3) tier = "mid";
 
   return { score, tier };
@@ -239,9 +286,9 @@ function SuccessStrong({ artistName }: { artistName: string }) {
         {artistName || "You"} — you're a fit.
       </h1>
       <p className="mb-10 font-mono text-sm leading-relaxed text-muted-foreground">
-        Based on what you shared, we'd like to get on a 30-minute strategy call
-        to scope your release. Pick a time that works for you and our team will
-        come prepared with a preliminary plan.
+        Based on what you shared, we'd like to get on a 30-minute strategy call.
+        Pick a time that works for you — our team will come prepared with a
+        preliminary plan tailored to your situation.
       </p>
 
       <div className="mb-10 border border-foreground bg-foreground/5 p-6">
@@ -252,9 +299,9 @@ function SuccessStrong({ artistName }: { artistName: string }) {
           </p>
         </div>
         <p className="mb-5 font-mono text-[11px] leading-relaxed text-muted-foreground">
-          30 minutes · Free · With a NewCulture release strategist. We'll review
-          your music, bottleneck, and goals, then walk you through how Release
-          Execution would work for your specific release.
+          30 minutes · Free · With a NewCulture strategist. We'll review your
+          work, goals, and bottleneck, then walk you through exactly how an
+          engagement would look for you.
         </p>
         <a
           href="https://cal.com/newculture/strategy"
@@ -267,7 +314,7 @@ function SuccessStrong({ artistName }: { artistName: string }) {
       </div>
 
       <p className="font-mono text-[11px] leading-relaxed text-muted-foreground/70">
-        Prefer email? We'll also send you a confirmation and booking link at the
+        Prefer email? We'll also send a confirmation and booking link at the
         address you provided.
       </p>
     </div>
@@ -287,19 +334,18 @@ function SuccessMid({ artistName }: { artistName: string }) {
         Thanks{artistName ? `, ${artistName}` : ""}. We're reviewing.
       </h1>
       <p className="mb-10 font-mono text-sm leading-relaxed text-muted-foreground">
-        Your submission is being personally reviewed by our team. Expect a
-        response within 48 hours with one of the following:
+        Your submission is being personally reviewed. Expect a response within
+        48 hours with one of the following:
       </p>
       <ul className="mb-12 space-y-4 border-l border-border pl-6">
         <li className="font-mono text-sm leading-relaxed text-foreground">
-          → A booking link for a strategy call, if it's the right moment
+          → A booking link for a strategy call, if the moment is right
         </li>
         <li className="font-mono text-sm leading-relaxed text-foreground">
-          → A scoped recommendation tailored to your release stage and budget
+          → A scoped recommendation tailored to your position and budget
         </li>
         <li className="font-mono text-sm leading-relaxed text-foreground">
-          → A direct invitation to our Release Blueprint if you're earlier in
-          the process
+          → An invitation to Strategy & Blueprint if you're earlier in the arc
         </li>
       </ul>
 
@@ -309,7 +355,7 @@ function SuccessMid({ artistName }: { artistName: string }) {
         </p>
         <p className="mb-4 font-mono text-sm leading-relaxed text-muted-foreground">
           Have a look at the operating stack we use with clients. It's the same
-          stack we'd deploy for your release if we take it on.
+          stack we'd deploy for you if we take the engagement on.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -336,39 +382,42 @@ function SuccessLight({ artistName }: { artistName: string }) {
       <div className="mb-8 flex items-center gap-3">
         <Compass size={20} className="text-foreground" strokeWidth={1.5} />
         <p className="font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
-          // WE RECOMMEND A BLUEPRINT FIRST
+          // WE RECOMMEND STARTING LIGHTER
         </p>
       </div>
       <h1 className="mb-6 font-display text-4xl font-bold tracking-tight text-foreground md:text-6xl">
-        Start with a Release Blueprint.
+        Start with a Blueprint.
       </h1>
       <p className="mb-8 font-mono text-sm leading-relaxed text-muted-foreground">
         Based on your application, the highest-leverage next step for{" "}
         {artistName ? <span className="text-foreground">{artistName}</span> : "you"}{" "}
-        isn't full-service execution yet — it's a scoped plan you can execute
-        yourself (or hand to us when you're ready).
+        isn't full-service execution yet. A scoped written plan will give you
+        real direction — you can execute it yourself, or come back to us when
+        the timing lines up.
       </p>
 
       <div className="mb-10 border border-foreground bg-foreground/5 p-6">
         <div className="mb-4 flex items-center gap-2">
           <Compass size={14} className="text-foreground" />
           <p className="font-mono text-[10px] tracking-[0.3em] text-foreground">
-            RELEASE BLUEPRINT
+            STRATEGY & BLUEPRINT
           </p>
         </div>
         <p className="mb-5 font-mono text-[11px] leading-relaxed text-muted-foreground">
-          A scoped written plan for your next release: strategy audit, 8-week
-          rollout calendar, budget framework, and the exact tool + provider
-          stack to use. Budget-fit. Built for where you actually are right now.
+          A scoped written plan for your next move — release, growth, placements,
+          or positioning. Built for where you actually are right now.
         </p>
         <ul className="mb-6 space-y-2">
           {[
             "60-minute strategy audit with our team",
-            "8-week rollout calendar with channel mix",
+            "Written roadmap tailored to your goal",
             "Tool & provider stack recommendation",
-            "Written handoff document",
+            "Written handoff document you keep",
           ].map((x) => (
-            <li key={x} className="flex items-start gap-2 font-mono text-[11px] text-muted-foreground">
+            <li
+              key={x}
+              className="flex items-start gap-2 font-mono text-[11px] text-muted-foreground"
+            >
               <Check size={12} className="mt-0.5 flex-shrink-0 text-foreground" />
               <span>{x}</span>
             </li>
@@ -378,21 +427,28 @@ function SuccessLight({ artistName }: { artistName: string }) {
           to="/services"
           className="inline-flex items-center gap-2 border border-foreground bg-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
         >
-          GET A RELEASE BLUEPRINT <ArrowRight size={14} />
+          SEE THE BLUEPRINT <ArrowRight size={14} />
         </Link>
       </div>
 
       <p className="mb-4 font-mono text-[11px] leading-relaxed text-muted-foreground/70">
-        Still want a full-service review? Reply to our confirmation email with
-        more context — budget plans, co-funding, timeline — and we'll take
-        another look.
+        Have more context we should know? Email us directly with plans,
+        co-funding, or timeline — we'll take another look.
       </p>
-      <Link
-        to="/tools"
-        className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
-      >
-        EXPLORE OUR STACK →
-      </Link>
+      <div className="flex flex-wrap gap-4">
+        <a
+          href="mailto:hello@newculture.co"
+          className="font-mono text-[11px] tracking-[0.25em] text-foreground underline underline-offset-[6px] hover:opacity-70"
+        >
+          GET IN TOUCH →
+        </a>
+        <Link
+          to="/tools"
+          className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
+        >
+          EXPLORE OUR STACK →
+        </Link>
+      </div>
     </div>
   );
 }
@@ -409,10 +465,14 @@ export default function ApplyPage() {
     fullName: "",
     email: "",
     artistName: "",
+    role: "",
     musicLinks: [""],
-    releaseStage: "",
-    helpNeeded: [],
+    stage: "",
     targetReleaseDate: "",
+    supportAreas: [],
+    engagement: "",
+    assets: "",
+    timeframe: "",
     bottleneck: "",
     budget: "",
     readyThirtyDays: null,
@@ -424,12 +484,12 @@ export default function ApplyPage() {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [submitted]);
 
-  const toggleHelp = (g: HelpNeeded) => {
+  const toggleSupport = (s: Support) => {
     setData((prev) => ({
       ...prev,
-      helpNeeded: prev.helpNeeded.includes(g)
-        ? prev.helpNeeded.filter((x) => x !== g)
-        : [...prev.helpNeeded, g],
+      supportAreas: prev.supportAreas.includes(s)
+        ? prev.supportAreas.filter((x) => x !== s)
+        : [...prev.supportAreas, s],
     }));
   };
 
@@ -452,8 +512,12 @@ export default function ApplyPage() {
       data.fullName.trim().length > 0 &&
       data.email.trim().length > 0 &&
       data.artistName.trim().length > 0 &&
+      !!data.role &&
       data.musicLinks.some((l) => l.trim().length > 0) &&
-      !!data.releaseStage &&
+      !!data.stage &&
+      !!data.engagement &&
+      !!data.assets &&
+      !!data.timeframe &&
       !!data.budget &&
       data.readyThirtyDays !== null &&
       data.bottleneck.trim().length > 0
@@ -469,7 +533,6 @@ export default function ApplyPage() {
       submittedAt: new Date().toISOString(),
     };
     const { tier, score } = scoreApplication(payload);
-    // Supabase-ready mock: persist in localStorage for now.
     try {
       const key = "nc_applications";
       const existing = JSON.parse(localStorage.getItem(key) || "[]");
@@ -490,9 +553,13 @@ export default function ApplyPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mx-auto max-w-2xl"
             >
-              {submitted === "strong" && <SuccessStrong artistName={data.artistName} />}
+              {submitted === "strong" && (
+                <SuccessStrong artistName={data.artistName} />
+              )}
               {submitted === "mid" && <SuccessMid artistName={data.artistName} />}
-              {submitted === "light" && <SuccessLight artistName={data.artistName} />}
+              {submitted === "light" && (
+                <SuccessLight artistName={data.artistName} />
+              )}
             </motion.div>
           </section>
         </div>
@@ -513,7 +580,7 @@ export default function ApplyPage() {
               animate={{ opacity: 1 }}
               className="mb-4 font-mono text-[10px] tracking-[0.4em] text-muted-foreground"
             >
-              // APPLY FOR RELEASE SUPPORT
+              // APPLY TO WORK WITH NEWCULTURE
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
@@ -521,7 +588,7 @@ export default function ApplyPage() {
               transition={{ delay: 0.1 }}
               className="mb-6 font-display text-4xl font-bold tracking-tight text-foreground md:text-6xl"
             >
-              Tell us about your release.
+              Apply to work with NewCulture.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -529,9 +596,10 @@ export default function ApplyPage() {
               transition={{ delay: 0.2 }}
               className="max-w-xl font-mono text-sm leading-relaxed text-muted-foreground"
             >
-              We take on a limited number of artists each quarter. This intake
-              helps us decide if there's a fit. Most artists finish it in under
-              three minutes.
+              Tell us where you are, what you need, and where you're trying to
+              go. We review your position, goals, timeline, and budget — then
+              decide the best next step. Most applicants finish this in under
+              four minutes.
             </motion.p>
             {preselectedOffer && (
               <motion.div
@@ -550,7 +618,10 @@ export default function ApplyPage() {
 
         {/* Form */}
         <section className="px-6 py-16">
-          <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-20">
+          <form
+            onSubmit={handleSubmit}
+            className="mx-auto max-w-3xl space-y-20"
+          >
             {/* Step 1 — You */}
             <div>
               <StepHeader step="01" title="You" />
@@ -560,7 +631,9 @@ export default function ApplyPage() {
                   <TextInput
                     required
                     value={data.fullName}
-                    onChange={(e) => setData({ ...data, fullName: e.target.value })}
+                    onChange={(e) =>
+                      setData({ ...data, fullName: e.target.value })
+                    }
                     placeholder="First and last"
                   />
                 </div>
@@ -570,28 +643,43 @@ export default function ApplyPage() {
                     required
                     type="email"
                     value={data.email}
-                    onChange={(e) => setData({ ...data, email: e.target.value })}
+                    onChange={(e) =>
+                      setData({ ...data, email: e.target.value })
+                    }
                     placeholder="you@domain.com"
                   />
                 </div>
                 <div>
-                  <FieldLabel label="ARTIST NAME" required />
+                  <FieldLabel label="ARTIST / PROJECT NAME" required />
                   <TextInput
                     required
                     value={data.artistName}
-                    onChange={(e) => setData({ ...data, artistName: e.target.value })}
-                    placeholder="Your stage name"
+                    onChange={(e) =>
+                      setData({ ...data, artistName: e.target.value })
+                    }
+                    placeholder="Your stage or project name"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="ROLE" required />
+                  <ChipSelect
+                    options={ROLE_OPTIONS}
+                    value={data.role || null}
+                    onChange={(v) => setData({ ...data, role: v })}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Step 2 — Music */}
+            {/* Step 2 — Your work */}
             <div>
-              <StepHeader step="02" title="Your music" />
-              <div className="space-y-6">
+              <StepHeader step="02" title="Your work" />
+              <div className="space-y-8">
                 <div>
-                  <FieldLabel label="MUSIC LINKS (SPOTIFY, SOUNDCLOUD, YOUTUBE)" required />
+                  <FieldLabel
+                    label="MUSIC LINKS (SPOTIFY, SOUNDCLOUD, YOUTUBE)"
+                    required
+                  />
                   <div className="space-y-3">
                     {data.musicLinks.map((link, i) => (
                       <div key={i} className="flex items-center gap-2">
@@ -600,7 +688,11 @@ export default function ApplyPage() {
                           required={i === 0}
                           value={link}
                           onChange={(e) => setMusicLink(i, e.target.value)}
-                          placeholder={i === 0 ? "Primary link" : "Additional link (optional)"}
+                          placeholder={
+                            i === 0
+                              ? "Primary link"
+                              : "Additional link (optional)"
+                          }
                         />
                         {data.musicLinks.length > 1 && (
                           <button
@@ -625,23 +717,16 @@ export default function ApplyPage() {
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Step 3 — Where you are */}
-            <div>
-              <StepHeader step="03" title="Where you are" />
-              <div className="space-y-8">
                 <div>
-                  <FieldLabel label="CURRENT RELEASE STAGE" required />
+                  <FieldLabel label="CURRENT STAGE" required />
                   <ChipSelect
                     options={STAGE_OPTIONS}
-                    value={data.releaseStage || null}
-                    onChange={(v) => setData({ ...data, releaseStage: v })}
+                    value={data.stage || null}
+                    onChange={(v) => setData({ ...data, stage: v })}
                   />
                 </div>
                 <div>
-                  <FieldLabel label="TARGET RELEASE DATE" />
+                  <FieldLabel label="TARGET RELEASE DATE (OPTIONAL)" />
                   <TextInput
                     type="date"
                     value={data.targetReleaseDate}
@@ -653,57 +738,95 @@ export default function ApplyPage() {
                     LEAVE BLANK IF NOT YET SCHEDULED
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Step 3 — What you need */}
+            <div>
+              <StepHeader step="03" title="What you need" />
+              <div className="space-y-8">
+                <div>
+                  <FieldLabel label="SUPPORT AREAS (SELECT ALL THAT APPLY)" />
+                  <ChipSelect
+                    options={SUPPORT_OPTIONS}
+                    value={data.supportAreas}
+                    onChange={(v) => toggleSupport(v)}
+                    multi
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="HOW YOU WANT TO WORK" required />
+                  <ChipSelect
+                    options={ENGAGEMENT_OPTIONS}
+                    value={data.engagement || null}
+                    onChange={(v) => setData({ ...data, engagement: v })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Step 4 — Context */}
+            <div>
+              <StepHeader step="04" title="Context" />
+              <div className="space-y-8">
+                <div>
+                  <FieldLabel label="WHAT'S IN PLACE TODAY" required />
+                  <ChipSelect
+                    options={ASSETS_OPTIONS}
+                    value={data.assets || null}
+                    onChange={(v) => setData({ ...data, assets: v })}
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="TIMEFRAME" required />
+                  <ChipSelect
+                    options={TIMEFRAME_OPTIONS}
+                    value={data.timeframe || null}
+                    onChange={(v) => setData({ ...data, timeframe: v })}
+                  />
+                </div>
                 <div>
                   <FieldLabel label="BIGGEST BOTTLENECK" required />
                   <TextArea
                     required
                     rows={4}
                     value={data.bottleneck}
-                    onChange={(e) => setData({ ...data, bottleneck: e.target.value })}
+                    onChange={(e) =>
+                      setData({ ...data, bottleneck: e.target.value })
+                    }
                     placeholder="What's actually blocking you right now? Be specific."
                   />
                 </div>
               </div>
             </div>
 
-            {/* Step 4 — What you need */}
+            {/* Step 5 — Budget & timing */}
             <div>
-              <StepHeader step="04" title="What you need" />
-              <div>
-                <FieldLabel label="SELECT ALL THAT APPLY" />
-                <ChipSelect
-                  options={HELP_OPTIONS}
-                  value={data.helpNeeded}
-                  onChange={(v) => toggleHelp(v)}
-                  multi
-                />
-              </div>
-            </div>
-
-            {/* Step 5 — Budget + timing */}
-            <div>
-              <StepHeader step="05" title="Budget & timing" />
+              <StepHeader step="05" title="Budget" />
               <div className="space-y-8">
                 <div>
-                  <FieldLabel label="BUDGET RANGE FOR THIS RELEASE" required />
+                  <FieldLabel label="BUDGET RANGE" required />
                   <ChipSelect
                     options={BUDGET_OPTIONS}
                     value={data.budget || null}
                     onChange={(v) => setData({ ...data, budget: v })}
                   />
                   <p className="mt-3 font-mono text-[10px] leading-relaxed text-muted-foreground/60">
-                    Custom-scoped. Selective onboarding. We work across budget levels —
-                    but matching you to the right offer depends on being honest here.
+                    Custom-scoped. Selective onboarding. We work across budget
+                    levels — but matching you to the right engagement depends
+                    on being honest here.
                   </p>
                 </div>
                 <div className="border border-border bg-card/30 p-5">
                   <YesNo
                     label="Ready to move in the next 30 days?"
                     value={data.readyThirtyDays}
-                    onChange={(v) => setData({ ...data, readyThirtyDays: v })}
+                    onChange={(v) =>
+                      setData({ ...data, readyThirtyDays: v })
+                    }
                   />
                   <p className="mt-3 font-mono text-[10px] leading-relaxed text-muted-foreground/60">
-                    Be honest. "No" doesn't disqualify you — it just changes what we
+                    Be honest. "No" doesn't disqualify — it changes what we
                     recommend.
                   </p>
                 </div>
@@ -712,7 +835,9 @@ export default function ApplyPage() {
                   <TextArea
                     rows={4}
                     value={data.notes}
-                    onChange={(e) => setData({ ...data, notes: e.target.value })}
+                    onChange={(e) =>
+                      setData({ ...data, notes: e.target.value })
+                    }
                     placeholder="Context, co-collaborators, timing nuances, etc."
                   />
                 </div>
@@ -734,6 +859,15 @@ export default function ApplyPage() {
               </button>
               <p className="mt-4 font-mono text-[10px] tracking-[0.2em] text-muted-foreground/50">
                 PERSONALLY REVIEWED · 48-HOUR RESPONSE · SELECTIVE ONBOARDING
+              </p>
+              <p className="mt-2 font-mono text-[10px] tracking-[0.2em] text-muted-foreground/40">
+                NOT THE RIGHT FIT FOR AN APPLICATION?{" "}
+                <a
+                  href="mailto:hello@newculture.co"
+                  className="text-muted-foreground underline underline-offset-[4px] hover:text-foreground"
+                >
+                  GET IN TOUCH →
+                </a>
               </p>
             </div>
           </form>

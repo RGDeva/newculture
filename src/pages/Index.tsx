@@ -11,28 +11,29 @@ function FinalCTA() {
     <section className="border-t border-border bg-background py-32">
       <div className="mx-auto max-w-3xl px-6 text-center">
         <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
-          // READY TO RUN YOUR RELEASE
+          // SELECTIVE ONBOARDING
         </p>
         <h2 className="mb-6 font-display text-4xl font-bold tracking-tight text-foreground md:text-6xl">
-          Let's build your next release together.
+          Ready to work with us?
         </h2>
         <p className="mx-auto mb-10 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-          We take on a limited number of artists each quarter. Apply in under
-          three minutes and we'll respond within 48 hours.
+          We take on a limited number of clients each quarter. Apply in under
+          four minutes and we'll respond within 48 hours. Otherwise, get in
+          touch.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             to="/apply"
             className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
           >
-            APPLY FOR RELEASE SUPPORT <ArrowRight size={14} />
+            APPLY <ArrowRight size={14} />
           </Link>
-          <Link
-            to="/services"
+          <a
+            href="mailto:hello@newculture.co"
             className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
           >
-            GET A RELEASE BLUEPRINT →
-          </Link>
+            GET IN TOUCH →
+          </a>
         </div>
       </div>
     </section>

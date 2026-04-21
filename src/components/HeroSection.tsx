@@ -6,9 +6,10 @@ import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 
 const MORPHING_WORDS = [
   "NEXT RELEASE",
-  "ROLLOUT PLAN",
+  "GROWTH ENGINE",
   "FAN ECONOMY",
   "CREATIVE BUSINESS",
+  "PLACEMENT PIPELINE",
 ];
 
 const PARTNER_STACK = [
@@ -49,7 +50,7 @@ export function HeroSection() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="mb-6 font-mono text-[11px] tracking-[0.4em] text-muted-foreground"
         >
-          NEWCULTURE · LABEL-SERVICES FOR INDEPENDENT ARTISTS
+NEWCULTURE · MUSIC GROWTH & ARTIST DEVELOPMENT
         </motion.p>
 
         {/* Static heading */}
@@ -81,9 +82,9 @@ export function HeroSection() {
           transition={{ delay: 1.0, duration: 0.8 }}
           className="mx-auto mb-12 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground"
         >
-          Label-style release support for independent artists.
-          We finish, launch, and monetize your music — strategy, mix/master, rollout,
-          and direct-to-fan systems — without the traditional label deal.
+Selective consulting + execution for artists, producers, and creative operators.
+          Strategy, growth, release, and long-term development — where there's fit.
+          Built around real outcomes, not retainers.
         </motion.p>
 
         {/* Liquid metal CTA buttons */}
@@ -94,11 +95,11 @@ export function HeroSection() {
           className="flex flex-col items-center justify-center gap-6 sm:flex-row"
         >
           <Link to="/apply">
-            <LiquidMetalButton label="Apply for Release Support" />
+            <LiquidMetalButton label="Apply" />
           </Link>
-          <Link to="/services">
-            <LiquidMetalButton label="Get a Release Blueprint" />
-          </Link>
+          <a href="mailto:hello@newculture.co">
+            <LiquidMetalButton label="Get in touch" />
+          </a>
         </motion.div>
 
         {/* Secondary text CTA */}
@@ -109,10 +110,10 @@ export function HeroSection() {
           className="mt-6"
         >
           <Link
-            to="/apply"
+            to="/services"
             className="font-mono text-[10px] tracking-[0.25em] text-muted-foreground/70 underline underline-offset-[6px] transition-colors hover:text-foreground"
           >
-            TALK TO NEWCULTURE →
+            HOW WE WORK →
           </Link>
         </motion.div>
 

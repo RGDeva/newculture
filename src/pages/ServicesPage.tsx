@@ -18,64 +18,63 @@ type Offer = {
 
 const OFFERS: Offer[] = [
   {
-    id: "blueprint",
+    id: "strategy",
     eyebrow: "OFFER 01",
-    name: "Release Blueprint",
+    name: "Strategy & Blueprint",
     icon: Compass,
     forWho:
-      "Artists 2–6 weeks out from a release who need a plan, not a vendor.",
+      "Artists, producers, or operators who need a plan before spending money. Release, growth, placements, or positioning.",
     outcome:
-      "A release you can actually execute — or hand to us. Budget-based, scoped to your goals.",
+      "A scoped written roadmap you can execute yourself — or hand to us when you're ready.",
     includes: [
       "60-minute strategy audit with our team",
-      "8-week rollout calendar with channel mix",
-      "Paid media budget framework",
+      "Written roadmap tailored to your goal",
+      "Channel mix + budget framework",
       "Tool & provider stack recommendation",
-      "Mix / master direction and provider match",
+      "Vendor match (engineers, editors, placement reps)",
       "Written handoff document you keep",
     ],
-    cta: { label: "Get a Release Blueprint", to: "/apply?offer=blueprint" },
+    cta: { label: "Apply", to: "/apply?offer=strategy" },
     color: "#22c55e",
   },
   {
     id: "execution",
     eyebrow: "OFFER 02",
-    name: "Release Execution",
+    name: "Execution & Growth",
     icon: Rocket,
     forWho:
-      "Artists with a song ready to launch who want it run professionally end-to-end.",
+      "Artists and producers with a specific project or growth goal who want it operated end-to-end by our team.",
     outcome:
-      "A real release that reaches real fans and produces real cashflow. We run the rollout.",
+      "Real outcomes — releases, fans, placements, or revenue. Reported weekly.",
     includes: [
-      "Mix & master (RoEx + curated engineers)",
-      "Full creative asset package",
-      "Distribution setup and DSP pitching",
-      "Paid rollout (Meta, TikTok, YouTube)",
-      "Press & playlist seeding",
+      "Release rollouts (mix/master, assets, distribution, paid media, press)",
+      "Paid growth retainer (Meta, TikTok, YouTube)",
+      "Creative & content production",
+      "Placement & beat outreach (producers)",
       "Direct-to-fan monetization (Wavi / Dreamster)",
-      "Week-by-week reporting",
+      "Weekly reporting and operator check-ins",
     ],
-    cta: { label: "Apply for Release Support", to: "/apply?offer=execution" },
+    cta: { label: "Apply", to: "/apply?offer=execution" },
     color: "#f59e0b",
   },
   {
-    id: "development",
+    id: "partnership",
     eyebrow: "OFFER 03",
-    name: "Artist Development",
+    name: "Development & Partnership",
     icon: Sparkles,
     forWho:
-      "Artists committing to a 6–12 month arc. Selective. Not for everyone.",
+      "Committed artists, producers, and operators ready for a long-term arc. Selective. Not for everyone.",
     outcome:
-      "A sustainable independent operation with repeatable releases and real income.",
+      "A sustainable independent operation with repeatable output and real infrastructure.",
     includes: [
-      "Multi-release roadmap and A&R",
+      "Multi-project roadmap and A&R",
       "Brand architecture and visual direction",
-      "Monthly content system",
+      "Monthly content + release system",
       "Paid growth retainer",
-      "Royalty and IP management (Record Financial)",
+      "Publishing, royalty, and IP management (Record Financial)",
       "Direct advisory access to our team",
     ],
-    cta: { label: "Talk to NewCulture", to: "/apply?offer=development" },
+    cta: { label: "Apply", to: "/apply?offer=partnership" },
     color: "#a855f7",
   },
 ];
@@ -195,9 +194,9 @@ export default function ServicesPage() {
               transition={{ delay: 0.2 }}
               className="mx-auto max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground"
             >
-              NewCulture runs release-stage support for independent artists.
-              Finish the song, package the rollout, run the traffic, and build
-              the fan economy — with operators, not another platform.
+NewCulture is a selective consulting + execution partner for artists,
+              producers, and creative operators. Strategy, growth, release,
+              placements, and long-term development — where there's fit.
             </motion.p>
           </div>
         </section>
@@ -247,25 +246,25 @@ export default function ServicesPage() {
         <section className="border-t border-border px-6 py-24">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-6 font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Ready to run your next release properly?
+              Ready to work with us?
             </h2>
             <p className="mx-auto mb-10 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-              We take on a limited number of artists each quarter. If that's you,
-              start with a short application.
+              We take on a limited number of clients each quarter. If there's
+              a fit, start with a short application. Otherwise, get in touch.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 to="/apply"
                 className="inline-flex items-center gap-2 border border-foreground bg-foreground px-8 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
               >
-                APPLY FOR RELEASE SUPPORT <ArrowRight size={14} />
+                APPLY <ArrowRight size={14} />
               </Link>
-              <Link
-                to="/tools"
+              <a
+                href="mailto:hello@newculture.co"
                 className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground underline underline-offset-[6px] hover:text-foreground"
               >
-                EXPLORE OUR OPERATING STACK →
-              </Link>
+                GET IN TOUCH →
+              </a>
             </div>
           </div>
         </section>
