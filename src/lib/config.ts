@@ -36,20 +36,24 @@ export const ROEX_API_URL =
   "https://tonn-api.roexaudio.com/v1";
 
 // Recoupable API
-export const RECOUPABLE_API_KEY = import.meta.env.VITE_RECOUPABLE_API_KEY as
-  | string
-  | undefined;
+// Provided key: recoup_sk_9wMCq6Y0JLhqrq5KKQ7F0v1qewI3mySUi0KIfQG5Pk0
+export const RECOUPABLE_API_KEY =
+  (import.meta.env.VITE_RECOUPABLE_API_KEY as string | undefined) ||
+  "recoup_sk_9wMCq6Y0JLhqrq5KKQ7F0v1qewI3mySUi0KIfQG5Pk0";
 export const RECOUPABLE_API_URL =
   (import.meta.env.VITE_RECOUPABLE_API_URL as string | undefined) ||
-  "https://api.recoupable.com/v1";
+  "https://recoup-api.vercel.app/api";
 
-// ONCE API
+// ONCE API (MCP Protocol - uses OAuth, not simple API key)
+// MCP Server: https://beta.once.app/api/mcp
+// Auth: OAuth browser flow via once.app → returns Bearer token
+// Docs: https://docs.once.app/mcp/agents
 export const ONCE_API_KEY = import.meta.env.VITE_ONCE_API_KEY as
   | string
   | undefined;
 export const ONCE_API_URL =
   (import.meta.env.VITE_ONCE_API_URL as string | undefined) ||
-  "https://api.once.co/v1";
+  "https://beta.once.app/api/mcp";
 
 export const mailtoHref = `mailto:${CONTACT_EMAIL}`;
 

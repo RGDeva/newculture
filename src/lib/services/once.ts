@@ -1,12 +1,22 @@
 // ONCE API Service
 // Powers: release operations, publishing workflows, distribution rail
 // Docs: https://docs.once.app/mcp/api-reference
-// Protocol: MCP (Model Context Protocol)
-// Note: ONCE uses MCP server - requires agent setup at https://docs.once.app/mcp/agents
+// Protocol: MCP (Model Context Protocol) with Streamable HTTP
+// MCP Server: https://beta.once.app/api/mcp
+// 
+// AUTHENTICATION:
+// ONCE uses OAuth browser flow, not a simple API key.
+// 1. User clicks "Connect ONCE" → opens once.app OAuth page
+// 2. User authenticates and authorizes the app
+// 3. ONCE redirects back with access_token (Bearer token)
+// 4. Store token and use in Authorization: Bearer <token> header
+// 
+// For web apps: Use the ONCE web app directly or implement OAuth PKCE flow
+// Setup guide: https://docs.once.app/mcp/agents
 
 import { ONCE_API_KEY, ONCE_API_URL } from "@/lib/config";
 
-const ONCE_BASE_URL = ONCE_API_URL || "https://api.once.app/v1";
+const ONCE_BASE_URL = ONCE_API_URL || "https://beta.once.app/api/mcp";
 const hasCredentials = !!ONCE_API_KEY;
 
 // Release Operation States
