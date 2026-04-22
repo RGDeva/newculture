@@ -4,3 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# SPA fallback — ensures client-side routes like /tools, /vault, /projects work on direct navigation
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
