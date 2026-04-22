@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -11,6 +11,9 @@ import {
   Music,
   Shield,
   Zap,
+  Play,
+  Pause,
+  Volume2,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -107,6 +110,118 @@ function TextArea(
         {...rest}
         className="w-full resize-none border border-border bg-transparent p-3 font-mono text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/30 focus:border-foreground"
       />
+    </div>
+  );
+}
+
+// ── Audio Preview Component ─────────────────────────────────────────────
+function AudioPreview({ file }: { file: File }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const vol = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.volume = vol;
+      setVolume(vol);
+    }
+  };
+
+  const formatTime = (time: number) => {
+    if (isNaN(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const objectUrl = URL.createObjectURL(file);
+
+  return (
+    <div className="border border-foreground/20 bg-foreground/5 p-4">
+      <audio
+        ref={audioRef}
+        src={objectUrl}
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={() => setIsPlaying(false)}
+        className="hidden"
+      />
+      <div className="flex items-center gap-3 mb-3">
+        <button
+          onClick={togglePlay}
+          className="flex h-10 w-10 items-center justify-center border border-foreground bg-foreground text-background hover:bg-transparent hover:text-foreground transition-all"
+        >
+          {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+        <div className="flex-1">
+          <p className="font-mono text-xs text-foreground mb-1">{file.name}</p>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-muted-foreground w-10">
+              {formatTime(currentTime)}
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={duration || 0}
+              value={currentTime}
+              onChange={handleSeek}
+              className="flex-1 h-1 bg-border rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:rounded-full"
+            />
+            <span className="font-mono text-[10px] text-muted-foreground w-10">
+              {formatTime(duration)}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Volume2 size={14} className="text-muted-foreground" />
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.1}
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-16 h-1 bg-border rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:rounded-full"
+          />
+        </div>
+      </div>
+      <p className="font-mono text-[9px] text-muted-foreground/60 text-center">
+        Preview your track before proceeding to payment
+      </p>
     </div>
   );
 }
@@ -441,25 +556,28 @@ export default function MixUploadPage() {
               >
                 <UploadZone onFile={setFile} file={file} />
                 {file && (
-                  <div className="flex items-center justify-between border border-foreground/20 bg-foreground/5 p-4">
-                    <div className="flex items-center gap-3">
-                      <Music size={14} className="text-foreground" />
-                      <div>
-                        <p className="font-mono text-xs text-foreground">
-                          {file.name}
-                        </p>
-                        <p className="font-mono text-[10px] text-muted-foreground/60">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
+                  <>
+                    <AudioPreview file={file} />
+                    <div className="flex items-center justify-between border border-foreground/20 bg-foreground/5 p-4">
+                      <div className="flex items-center gap-3">
+                        <Music size={14} className="text-foreground" />
+                        <div>
+                          <p className="font-mono text-xs text-foreground">
+                            {file.name}
+                          </p>
+                          <p className="font-mono text-[10px] text-muted-foreground/60">
+                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
                       </div>
+                      <button
+                        onClick={() => setFile(null)}
+                        className="font-mono text-[10px] text-muted-foreground underline underline-offset-[3px] hover:text-foreground"
+                      >
+                        REMOVE
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setFile(null)}
-                      className="font-mono text-[10px] text-muted-foreground underline underline-offset-[3px] hover:text-foreground"
-                    >
-                      REMOVE
-                    </button>
-                  </div>
+                  </>
                 )}
                 <button
                   onClick={() => file && setStep("details")}
