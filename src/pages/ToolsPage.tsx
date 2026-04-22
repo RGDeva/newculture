@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight, Search, X, Star, ExternalLink, Zap, Lock,
-  Activity, BarChart3, Layers, Bot, Users, Workflow,
+  Activity, BarChart3, Layers, Bot, Users, Workflow, FileAudio, Target, Megaphone, Globe,
 } from "lucide-react";
+import { PRICES } from "@/lib/config";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
@@ -457,12 +458,12 @@ function ToolCard({ tool, onOpen }: { tool: Tool; onOpen: (t: Tool) => void }) {
           </p>
         )}
 
-        {/* CTAs */}
+        {/* CTAs — route to appropriate service */}
         <Link
-          to={`/apply?interest=${tool.id}`}
+          to={tool.id.includes("roex") ? "/mix" : "/apply?interest=${tool.id}"}
           className="mb-2 flex items-center justify-between border border-foreground bg-foreground/0 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-foreground transition-all hover:bg-foreground hover:text-background"
         >
-          <span>LET US HANDLE THIS →</span>
+          <span>{tool.id.includes("roex") ? "GET MIXED & MASTERED →" : "LET US HANDLE THIS →"}</span>
         </Link>
         <div className="flex gap-2">
           <a
@@ -610,19 +611,60 @@ export default function ToolsPage() {
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// OUR RECOMMENDED STACK</p>
-                <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">The operating stack we use with clients.</h1>
+                <p className="mb-2 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">// OPERATING STACK</p>
+                <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl">The backend systems powering our work.</h1>
                 <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
-The providers, tools, and systems we deploy to finish, launch, grow,
-                  and monetize music. We can handle any of these as part of Execution & Growth.
+                  RoEx for audio intelligence. Recoupable for research & strategy. 
+                  ONCE for release operations. You get the outcomes — we handle the stack.
                 </p>
               </div>
               <Link
                 to="/apply"
                 className="inline-flex items-center gap-2 self-start border border-foreground bg-foreground px-5 py-2.5 font-mono text-[11px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground md:self-end"
               >
-APPLY →
+                APPLY →
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Backend Stack Overview */}
+        <div className="border-b border-border bg-card/10 px-6 py-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid gap-px bg-border md:grid-cols-3">
+              <div className="bg-background p-6">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center border border-emerald-500/30 bg-emerald-500/5">
+                  <FileAudio size={18} className="text-emerald-500" />
+                </div>
+                <p className="mb-1 font-mono text-[9px] tracking-[0.2em] text-emerald-500">ROEX</p>
+                <h3 className="mb-2 font-display text-lg font-bold text-foreground">Audio Intelligence</h3>
+                <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
+                  Powers our Mix & Master product. Spectral analysis, mix scoring, 
+                  and AI-assisted mastering for release-ready audio.
+                </p>
+              </div>
+              <div className="bg-background p-6">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center border border-amber-500/30 bg-amber-500/5">
+                  <Search size={18} className="text-amber-500" />
+                </div>
+                <p className="mb-1 font-mono text-[9px] tracking-[0.2em] text-amber-500">RECOUPABLE</p>
+                <h3 className="mb-2 font-display text-lg font-bold text-foreground">Research & Strategy</h3>
+                <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
+                  Powers our Growth Audits and marketing campaigns. Audience analysis, 
+                  content intelligence, and competitive research.
+                </p>
+              </div>
+              <div className="bg-background p-6">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center border border-purple-500/30 bg-purple-500/5">
+                  <Globe size={18} className="text-purple-500" />
+                </div>
+                <p className="mb-1 font-mono text-[9px] tracking-[0.2em] text-purple-500">ONCE</p>
+                <h3 className="mb-2 font-display text-lg font-bold text-foreground">Release Operations</h3>
+                <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
+                  Powers our release execution layer. Distribution workflow, 
+                  publishing management, and release pipeline automation.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -695,11 +737,17 @@ APPLY →
                 </p>
               </div>
             </div>
+<Link
+              to="/free-analysis"
+              className="inline-flex items-center gap-2 border border-foreground px-4 py-2 font-mono text-[10px] tracking-[0.15em] text-foreground transition-all hover:bg-foreground hover:text-background"
+            >
+              FREE ANALYSIS →
+            </Link>
             <Link
-              to="/apply"
+              to="/mix"
               className="inline-flex items-center gap-2 border border-foreground bg-foreground px-4 py-2 font-mono text-[10px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
             >
-APPLY →
+              MIX & MASTER →
             </Link>
           </div>
 
@@ -812,32 +860,61 @@ APPLY →
             </div>
           </div>
 
-          {/* Conversion CTA — service-led */}
-          <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-2">
-            <div className="bg-background p-8 text-center">
-<p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">NOT SURE WHERE TO START?</p>
-              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Get a Blueprint</h3>
-              <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-                We'll audit your position, scope the right stack, and send you a written plan. You can execute it yourself — or hand it to us.
+          {/* Productized offers CTA */}
+          <div className="mt-12 grid gap-px border border-border bg-border md:grid-cols-3">
+            <div className="bg-background p-6 md:p-8">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center border border-foreground/20">
+                <Zap size={16} className="text-foreground" />
+              </div>
+              <p className="mb-1 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">FREE</p>
+              <h3 className="mb-2 font-display text-xl font-bold text-foreground">Track Health Check</h3>
+              <p className="mb-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+                AI analysis of your mix. Report in 10 minutes. No credit card required.
               </p>
-<Link
-                to="/apply?offer=strategy"
-                className="inline-flex items-center gap-2 border border-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-foreground transition-all hover:bg-foreground hover:text-background"
-              >
-                GET A BLUEPRINT →
+              <Link to="/free-analysis" className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-foreground underline underline-offset-[4px] hover:opacity-70">
+                START FREE →
               </Link>
             </div>
-            <div className="bg-background p-8 text-center">
-<p className="mb-2 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">WANT US TO RUN IT FOR YOU?</p>
-              <h3 className="mb-3 font-display text-2xl font-bold text-foreground">Apply to work with us</h3>
-              <p className="mx-auto mb-6 max-w-md font-mono text-xs text-muted-foreground">
-                We take on a limited number of clients each quarter. Release, growth, creative, placements, direct-to-fan — operated end-to-end.
+            <div className="bg-background p-6 md:p-8">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center border border-foreground/20">
+                <FileAudio size={16} className="text-foreground" />
+              </div>
+              <p className="mb-1 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">${(PRICES.mixAnalysis / 100).toFixed(0)}</p>
+              <h3 className="mb-2 font-display text-xl font-bold text-foreground">AI Mix & Master</h3>
+              <p className="mb-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+                Release-ready mix in 48 hours. You keep 100% ownership. One revision included.
               </p>
-<Link
-                to="/apply?offer=execution"
-                className="inline-flex items-center gap-2 border border-foreground bg-foreground px-6 py-3 font-mono text-xs tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground"
-              >
-                APPLY →
+              <Link to="/mix" className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-foreground underline underline-offset-[4px] hover:opacity-70">
+                UPLOAD TRACK →
+              </Link>
+            </div>
+            <div className="bg-background p-6 md:p-8">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center border border-foreground/20">
+                <Target size={16} className="text-foreground" />
+              </div>
+              <p className="mb-1 font-mono text-[9px] tracking-[0.3em] text-muted-foreground/60">${(PRICES.auditCall / 100).toFixed(0)}</p>
+              <h3 className="mb-2 font-display text-xl font-bold text-foreground">Growth Audit Call</h3>
+              <p className="mb-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+                45-min strategy session. Positioning, release plan, monetization. Recorded.
+              </p>
+              <Link to="/audit-call" className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-foreground underline underline-offset-[4px] hover:opacity-70">
+                BOOK CALL →
+              </Link>
+            </div>
+          </div>
+
+          {/* Full service CTA */}
+          <div className="mt-8 border border-foreground bg-foreground px-6 py-6 md:px-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="mb-1 font-mono text-[10px] tracking-[0.3em] text-background/60">NEED FULL-SERVICE SUPPORT?</p>
+                <h3 className="font-display text-xl font-bold text-background">Strategy, Execution, or Partnership</h3>
+                <p className="font-mono text-[11px] text-background/70">
+                  Application required. Custom-scoped engagements for serious artists and operators.
+                </p>
+              </div>
+              <Link to="/apply" className="inline-flex items-center gap-2 border border-background bg-background px-5 py-2.5 font-mono text-[11px] tracking-[0.15em] text-foreground transition-all hover:bg-transparent hover:text-background">
+                APPLY <ArrowRight size={12} />
               </Link>
             </div>
           </div>

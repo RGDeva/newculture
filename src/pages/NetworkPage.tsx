@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
+import { mailtoHref } from "@/lib/config";
 import {
   CATEGORY_COLORS, CATEGORY_LABELS,
   type MapPin as CreatorPin, type PinCategory,
@@ -14,6 +16,189 @@ import {
 import { CSV_STUDIO_PINS } from "@/data/csv-studios";
 import SearchComponent from "@/components/ui/animated-glowing-search-bar";
 import { AdvancedMap, type MapMarker } from "@/components/ui/interactive-map";
+
+// ── Provider Application Section ─────────────────────────────────────────
+function ProviderApplicationSection() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    role: "",
+    location: "",
+    portfolio: "",
+    services: [] as string[],
+    bio: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const ROLES = ["Studio", "Producer", "Engineer", "Videographer", "DJ", "Creative"];
+  const SERVICES = [
+    "Recording",
+    "Mixing",
+    "Mastering",
+    "Production",
+    "Beat Making",
+    "Music Videos",
+    "Content Creation",
+    "Live Performance",
+  ];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email.includes("@") || !form.role) return;
+    setSubmitting(true);
+    try {
+      if (supabase) {
+        await supabase.from("provider_applications").insert({
+          name: form.name,
+          email: form.email,
+          role: form.role,
+          location: form.location || null,
+          portfolio_url: form.portfolio || null,
+          services: form.services,
+          bio: form.bio || null,
+          status: "pending",
+          created_at: new Date().toISOString(),
+        });
+      }
+      const existing = JSON.parse(localStorage.getItem("nc_provider_apps") || "[]");
+      existing.push({ ...form, createdAt: new Date().toISOString() });
+      localStorage.setItem("nc_provider_apps", JSON.stringify(existing));
+    } catch {}
+    setSubmitting(false);
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="border border-foreground bg-foreground/5 p-8 text-center">
+        <p className="mb-2 font-mono text-[10px] tracking-[0.3em] text-foreground">APPLICATION RECEIVED</p>
+        <h3 className="mb-3 font-display text-xl font-bold text-foreground">Thanks for applying.</h3>
+        <p className="mx-auto max-w-md font-mono text-xs text-muted-foreground">
+          We review every application personally. If there's a fit, we'll reach out within 5 business days.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border border-border bg-card/20 p-6 md:p-8">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="mb-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground/60">PROVIDERS</p>
+          <h3 className="font-display text-xl font-bold text-foreground">Join the Network</h3>
+          <p className="mt-2 max-w-md font-mono text-xs text-muted-foreground">
+            Studios, engineers, producers, and creatives — apply to be listed in our curated directory.
+            Free, but selective.
+          </p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2">
+          <input
+            required
+            placeholder="Name / Business Name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="border-b border-border bg-transparent py-2 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/40 focus:border-foreground"
+          />
+          <input
+            type="email"
+            required
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="border-b border-border bg-transparent py-2 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/40 focus:border-foreground"
+          />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <input
+            placeholder="Location (City, State)"
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+            className="border-b border-border bg-transparent py-2 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/40 focus:border-foreground"
+          />
+          <input
+            type="url"
+            placeholder="Portfolio / Website URL"
+            value={form.portfolio}
+            onChange={(e) => setForm({ ...form, portfolio: e.target.value })}
+            className="border-b border-border bg-transparent py-2 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/40 focus:border-foreground"
+          />
+        </div>
+
+        <div>
+          <p className="mb-2 font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60">ROLE</p>
+          <div className="flex flex-wrap gap-2">
+            {ROLES.map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setForm({ ...form, role: r })}
+                className={`border px-3 py-1.5 font-mono text-[9px] tracking-[0.12em] transition-all ${
+                  form.role === r
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
+                }`}
+              >
+                {r.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-2 font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60">SERVICES OFFERED</p>
+          <div className="flex flex-wrap gap-2">
+            {SERVICES.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() =>
+                  setForm({
+                    ...form,
+                    services: form.services.includes(s)
+                      ? form.services.filter((x) => x !== s)
+                      : [...form.services, s],
+                  })
+                }
+                className={`border px-3 py-1.5 font-mono text-[9px] tracking-[0.12em] transition-all ${
+                  form.services.includes(s)
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
+                }`}
+              >
+                {s.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <textarea
+          rows={3}
+          placeholder="Short bio / credentials (optional)"
+          value={form.bio}
+          onChange={(e) => setForm({ ...form, bio: e.target.value })}
+          className="w-full resize-none border border-border bg-transparent p-3 font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/40 focus:border-foreground"
+        />
+
+        <div className="flex items-center justify-between pt-2">
+          <p className="font-mono text-[9px] text-muted-foreground/50">
+            By applying, you agree to be contacted about your listing.
+          </p>
+          <button
+            type="submit"
+            disabled={submitting || !form.name || !form.email.includes("@") || !form.role}
+            className="inline-flex items-center gap-2 border border-foreground bg-foreground px-4 py-2 font-mono text-[10px] tracking-[0.15em] text-background transition-all hover:bg-transparent hover:text-foreground disabled:opacity-40"
+          >
+            {submitting ? "SUBMITTING…" : "APPLY TO JOIN"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
 
 const RECENT_ACTIVITY = [
   { actor: "Kael Rivers",      action: "posted a new track",              time: "2m ago"  },
@@ -651,6 +836,9 @@ export default function NetworkPage() {
               )}
             </>
           )}
+
+          {/* Provider Application */}
+          <ProviderApplicationSection />
 
           {/* CTA */}
           <div className="mt-16 border border-border bg-card p-8 text-center">

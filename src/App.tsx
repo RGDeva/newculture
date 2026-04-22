@@ -10,6 +10,11 @@ import ServicesPage from "./pages/ServicesPage.tsx";
 import ApplyPage from "./pages/ApplyPage.tsx";
 import ProjectsPage from "./pages/ProjectsPage.tsx";
 import AdminApplicationsPage from "./pages/AdminApplicationsPage.tsx";
+import MixUploadPage from "./pages/MixUploadPage.tsx";
+import MixSuccessPage from "./pages/MixSuccessPage.tsx";
+import AuditCallPage from "./pages/AuditCallPage.tsx";
+import MarketingPackagePage from "./pages/MarketingPackagePage.tsx";
+import FreeAnalysisPage from "./pages/FreeAnalysisPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,6 +33,12 @@ const App = () => (
           <Route path="/network" element={<NetworkPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/admin/applications" element={<AdminApplicationsPage />} />
+          {/* Productized offers */}
+          <Route path="/mix" element={<MixUploadPage />} />
+          <Route path="/mix/success" element={<MixSuccessPage />} />
+          <Route path="/audit-call" element={<AuditCallPage />} />
+          <Route path="/marketing-package" element={<MarketingPackagePage />} />
+          <Route path="/free-analysis" element={<FreeAnalysisPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

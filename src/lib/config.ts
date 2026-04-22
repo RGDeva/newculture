@@ -22,4 +22,40 @@ export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as
 export const ADMIN_PASSWORD =
   (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined) || "newculture";
 
+// Stripe
+export const STRIPE_PUBLISHABLE_KEY = import.meta.env
+  .VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
+
+// RoEx API
+// Provided key: AIzaSyB4APe-Ll9TCjvKyouegkbaQoXQ41R9ITg
+export const ROEX_API_KEY =
+  (import.meta.env.VITE_ROEX_API_KEY as string | undefined) ||
+  "AIzaSyB4APe-Ll9TCjvKyouegkbaQoXQ41R9ITg";
+export const ROEX_API_URL =
+  (import.meta.env.VITE_ROEX_API_URL as string | undefined) ||
+  "https://tonn-api.roexaudio.com/v1";
+
+// Recoupable API
+export const RECOUPABLE_API_KEY = import.meta.env.VITE_RECOUPABLE_API_KEY as
+  | string
+  | undefined;
+export const RECOUPABLE_API_URL =
+  (import.meta.env.VITE_RECOUPABLE_API_URL as string | undefined) ||
+  "https://api.recoupable.com/v1";
+
+// ONCE API
+export const ONCE_API_KEY = import.meta.env.VITE_ONCE_API_KEY as
+  | string
+  | undefined;
+export const ONCE_API_URL =
+  (import.meta.env.VITE_ONCE_API_URL as string | undefined) ||
+  "https://api.once.co/v1";
+
 export const mailtoHref = `mailto:${CONTACT_EMAIL}`;
+
+// Productized offer prices (cents for Stripe)
+export const PRICES = {
+  mixAnalysis: 5000, // $50.00
+  auditCall: 15000, // $150.00
+  marketingPackage: 50000, // $500.00
+} as const;
