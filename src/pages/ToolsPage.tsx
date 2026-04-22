@@ -572,7 +572,7 @@ function ToolCard({ tool, onOpen }: { tool: Tool; onOpen: (t: Tool) => void }) {
           </Link>
         ) : (
           <Link
-            to={tool.id.includes("roex") ? "/mix" : "/apply?interest=${tool.id}"}
+            to={tool.id.includes("roex") ? "/mix" : `/apply?interest=${tool.id}`}
             className="mb-2 flex items-center justify-between border border-foreground bg-foreground/0 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-foreground transition-all hover:bg-foreground hover:text-background"
           >
             <span>{tool.id.includes("roex") ? "GET MIXED & MASTERED →" : "LET US HANDLE THIS →"}</span>
@@ -1027,7 +1027,7 @@ export default function ToolsPage() {
                 </p>
               </div>
               <Link to="/apply" className="inline-flex items-center gap-2 border border-background bg-background px-5 py-2.5 font-mono text-[11px] tracking-[0.15em] text-foreground transition-all hover:bg-transparent hover:text-background">
-                APPLY <ArrowRight size={12} />
+                APPLY <ArrowUpRight size={12} />
               </Link>
             </div>
           </div>
