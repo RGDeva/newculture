@@ -21,6 +21,8 @@ type ToolCategory =
   | "crm"
   | "analytics"
   | "infrastructure"
+  | "production"
+  | "battles"
   | "all";
 
 interface ToolInput {
@@ -361,6 +363,106 @@ const TOOLS: Tool[] = [
     pricingModel: "subscription",
     features: ["Instant AI Mastering", "Genre-Adaptive Algorithm", "Unlimited Masters", "Distribution Built-In"],
   },
+  // ── NEW MUSIC TOOLS ─────────────────────────────────────────────────
+  {
+    id: "beat-battle",
+    name: "Beat Battle",
+    url: "https://beat-battle.net",
+    tagline: "Producer Battle Platform",
+    description: "Real-time beat battles for producers. Compete head-to-head, showcase your skills, and climb the leaderboards. Community-driven competitions with voting and feedback.",
+    category: "battles",
+    color: "#ef4444",
+    badge: "NEW",
+    integration: "directory",
+    tier: "free",
+    pricingModel: "free",
+    features: ["Live Beat Battles", "Producer Leaderboards", "Community Voting", "Skill Showcases"],
+  },
+  {
+    id: "wavs",
+    name: "WAVS",
+    url: "https://wavs.com",
+    tagline: "Sample Marketplace & Community",
+    description: "Curated sample marketplace built for modern producers. High-quality sounds, one-shots, loops, and kits from top producers. Active community for feedback and collaboration.",
+    category: "production",
+    color: "#f59e0b",
+    badge: "NEW",
+    integration: "directory",
+    tier: "free",
+    pricingModel: "subscription",
+    features: ["Curated Samples", "Producer Community", "High-Quality Kits", "Feedback System"],
+  },
+  {
+    id: "starchild",
+    name: "Starchild",
+    url: "https://starchild.music",
+    tagline: "AI Music Creation",
+    description: "AI-powered music creation platform. Generate unique tracks, explore sonic possibilities, and collaborate with AI as your creative partner. Built for artists pushing boundaries.",
+    category: "ai",
+    color: "#8b5cf6",
+    badge: "NEW",
+    integration: "directory",
+    tier: "pro",
+    pricingModel: "subscription",
+    features: ["AI Track Generation", "Sonic Exploration", "Creative Collaboration", "Boundary-Pushing Tools"],
+  },
+  {
+    id: "mozartai",
+    name: "Mozart AI",
+    url: "https://mozartai.com",
+    tagline: "Classical AI Composition",
+    description: "AI composition tools trained on classical masters. Generate orchestral arrangements, explore harmonic structures, and blend classical traditions with modern production.",
+    category: "ai",
+    color: "#0ea5e9",
+    badge: "NEW",
+    integration: "directory",
+    tier: "pro",
+    pricingModel: "usage",
+    features: ["Classical AI Models", "Orchestral Arrangements", "Harmonic Analysis", "Tradition-Modern Blend"],
+  },
+  {
+    id: "s33r-vault",
+    name: "S33R Vault",
+    url: "https://s33r-vault.vercel.app",
+    tagline: "Music Asset Vault",
+    description: "Secure vault for music assets, stems, and project files. Organize, share, and manage your creative work. Embedded directly in NewCulture for easy access.",
+    category: "collaboration",
+    color: "#10b981",
+    badge: "EMBEDDED",
+    featured: true,
+    integration: "integrated",
+    tier: "free",
+    pricingModel: "free",
+    features: ["Secure Asset Storage", "Stem Organization", "Project Management", "Embedded Access"],
+  },
+  {
+    id: "notes-technology",
+    name: "Notes Technology",
+    url: "https://www.notestechnology.com",
+    tagline: "Music Rights Management",
+    description: "Modern rights management and royalty tracking for the digital age. Simplify your publishing admin, track earnings, and manage splits with transparency.",
+    category: "monetization",
+    color: "#ec4899",
+    badge: "NEW",
+    integration: "directory",
+    tier: "pro",
+    pricingModel: "subscription",
+    features: ["Rights Management", "Royalty Tracking", "Publishing Admin", "Split Management"],
+  },
+  {
+    id: "controlla",
+    name: "Controlla",
+    url: "https://controlla.xyz",
+    tagline: "Interactive Music Experiences",
+    description: "Create interactive music experiences for fans. Let your audience control elements of your tracks, remix in real-time, and engage with your music in new ways.",
+    category: "collaboration",
+    color: "#06b6d4",
+    badge: "NEW",
+    integration: "directory",
+    tier: "free",
+    pricingModel: "usage",
+    features: ["Interactive Tracks", "Fan Control", "Real-Time Remixing", "Engagement Tools"],
+  },
 ];
 
 const CATEGORY_META: Record<string, { label: string; icon: typeof Zap }> = {
@@ -373,6 +475,8 @@ const CATEGORY_META: Record<string, { label: string; icon: typeof Zap }> = {
   "crm":            { label: "CRM / Promo",        icon: Users },
   "analytics":      { label: "Analytics",          icon: BarChart3 },
   "infrastructure": { label: "Infrastructure",     icon: Workflow },
+  "production":     { label: "Production",         icon: FileAudio },
+  "battles":        { label: "Battles",            icon: Target },
 };
 
 const TIER_COLORS: Record<ToolTier, string> = {
@@ -459,12 +563,21 @@ function ToolCard({ tool, onOpen }: { tool: Tool; onOpen: (t: Tool) => void }) {
         )}
 
         {/* CTAs — route to appropriate service */}
-        <Link
-          to={tool.id.includes("roex") ? "/mix" : "/apply?interest=${tool.id}"}
-          className="mb-2 flex items-center justify-between border border-foreground bg-foreground/0 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-foreground transition-all hover:bg-foreground hover:text-background"
-        >
-          <span>{tool.id.includes("roex") ? "GET MIXED & MASTERED →" : "LET US HANDLE THIS →"}</span>
-        </Link>
+        {tool.id === "s33r-vault" ? (
+          <Link
+            to="/vault"
+            className="mb-2 flex w-full items-center justify-between border border-emerald-500 bg-emerald-500/10 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-emerald-500 transition-all hover:bg-emerald-500 hover:text-white"
+          >
+            <span>OPEN VAULT →</span>
+          </Link>
+        ) : (
+          <Link
+            to={tool.id.includes("roex") ? "/mix" : "/apply?interest=${tool.id}"}
+            className="mb-2 flex items-center justify-between border border-foreground bg-foreground/0 px-4 py-2.5 font-mono text-[9px] tracking-[0.2em] text-foreground transition-all hover:bg-foreground hover:text-background"
+          >
+            <span>{tool.id.includes("roex") ? "GET MIXED & MASTERED →" : "LET US HANDLE THIS →"}</span>
+          </Link>
+        )}
         <div className="flex gap-2">
           <a
             href={tool.url}

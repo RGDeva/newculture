@@ -15,6 +15,7 @@ import MixSuccessPage from "./pages/MixSuccessPage.tsx";
 import AuditCallPage from "./pages/AuditCallPage.tsx";
 import MarketingPackagePage from "./pages/MarketingPackagePage.tsx";
 import FreeAnalysisPage from "./pages/FreeAnalysisPage.tsx";
+import VaultPage from "./pages/VaultPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/network" element={<NetworkPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/vault" element={<VaultPage />} />
           <Route path="/admin/applications" element={<AdminApplicationsPage />} />
           {/* Productized offers */}
           <Route path="/mix" element={<MixUploadPage />} />
