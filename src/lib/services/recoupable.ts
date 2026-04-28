@@ -357,9 +357,189 @@ function getMockContentIdeas(artistName: string, count: number) {
   return ideas.slice(0, count);
 }
 
+// ============================================================================
+// CACHE LAYER - Rate limiting & cost control
+// ============================================================================
+
+const CACHE_DURATION = 1000 * 60 * 60 * 24; // 24 hours
+const requestCache = new Map<string, { data: any; timestamp: number }>();
+
+export async function researchArtistWithCache(
+  artistName: string,
+  platforms?: string[]
+): Promise<ArtistResearch | null> {
+  const cacheKey = `${artistName.toLowerCase().trim()}-${platforms?.sort().join(',') || 'all'}`;
+  const cached = requestCache.get(cacheKey);
+  
+  // Return cached if < 24 hours
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    console.log(`[Recoupable Cache] Hit for ${artistName}`);
+    return cached.data;
+  }
+  
+  console.log(`[Recoupable API] Fetching ${artistName}`);
+  const data = await researchArtist(artistName, platforms);
+  
+  if (data) {
+    requestCache.set(cacheKey, { data, timestamp: Date.now() });
+  }
+  
+  return data;
+}
+
+// ============================================================================
+// ENRICHMENT UTILITIES - Merge Recoupable data with our scoring
+// ============================================================================
+
+export function enrichPlayerCardWithRecoupable(
+  card: any,
+  research: ArtistResearch
+): { enrichedCard: any; enrichment: import('@/types/artistIntelligence').RecoupableEnrichment } {
+  // Calculate adjusted score based on real data
+  const realFollowers = research.audience?.totalFollowers || 0;
+  const realGrowthRate = research.audience?.growthRate || 0;
+  const avgViralScore = research.content?.topPerformingPosts?.reduce(
+    (sum, p) => sum + (p.viralScore || 0), 0
+  ) / (research.content?.topPerformingPosts?.length || 1);
+  
+  // Adjust audience score based on real data
+  let audienceBonus = 0;
+  if (realFollowers > 50000) audienceBonus = 5;
+  else if (realFollowers > 10000) audienceBonus = 3;
+  else if (realFollowers > 1000) audienceBonus = 1;
+  
+  // Adjust consistency score based on growth rate
+  let consistencyBonus = 0;
+  if (realGrowthRate > 20) consistencyBonus = 5;
+  else if (realGrowthRate > 10) consistencyBonus = 3;
+  else if (realGrowthRate > 5) consistencyBonus = 1;
+  
+  // Recalculate total score
+  const adjustedScore = Math.min(100, card.score + audienceBonus + consistencyBonus);
+  
+  // Determine trajectory from real growth data
+  const currentTrajectory = realGrowthRate > 15 ? 'fast' : 
+    realGrowthRate > 5 ? 'steady' : 'slow-growth';
+  
+  // Build enrichment object
+  const enrichment = {
+    lastSynced: new Date(),
+    audienceSnapshot: {
+      followers: realFollowers,
+      growthRate: realGrowthRate,
+      topCities: research.audience?.topCities?.map(c => c.city) || [],
+    },
+    contentPerformance: {
+      avgEngagement: research.content?.topPerformingPosts?.[0]?.engagement || 0,
+      viralScore: Math.round(avgViralScore),
+      bestPerformingThemes: research.content?.topPerformingPosts?.[0]?.themes || [],
+    },
+    competitivePosition: {
+      similarArtists: research.landscape?.similarArtists?.map(a => a.name) || [],
+      differentiationOpportunity: research.landscape?.similarArtists?.[0]?.differentiationOpportunity || '',
+    },
+    rolloutIntelligence: research.rollout ? {
+      optimalReleaseDay: research.rollout.optimalReleaseDay,
+      contentCalendar: research.rollout.contentCalendar,
+    } : undefined,
+  };
+  
+  // Create enriched card
+  const enrichedCard = {
+    ...card,
+    score: adjustedScore,
+    recoupableEnrichment: enrichment,
+    analysis: {
+      ...card.analysis,
+      growthProjection: {
+        ...card.analysis.growthProjection,
+        currentTrajectory,
+        optimizedPotential: adjustedScore > 70 ? 'breakout' : 'accelerated',
+      },
+      strengths: [
+        ...card.analysis.strengths,
+        ...(realGrowthRate > 10 ? [`Strong ${realGrowthRate}% monthly growth trajectory`] : []),
+        ...(research.audience?.topCities?.length > 0 
+          ? [`Geographic concentration in ${research.audience.topCities[0].city}`] 
+          : []),
+      ].slice(0, 5),
+      strategicInsight: card.analysis.strategicInsight + 
+        ` Live intelligence shows ${realFollowers.toLocaleString()} followers across platforms with ${realGrowthRate}% monthly growth.`,
+    },
+  };
+  
+  return { enrichedCard, enrichment };
+}
+
+// ============================================================================
+// LEAD SCORING - Predictive value assessment
+// ============================================================================
+
+export interface LeadScore {
+  totalScore: number;
+  isHighValue: boolean;
+  factors: {
+    audienceSize: number;
+    growthVelocity: number;
+    contentPerformance: number;
+    competitivePosition: number;
+  };
+  insights: string[];
+}
+
+export function calculateLeadScore(research: ArtistResearch | null): LeadScore {
+  if (!research) {
+    return {
+      totalScore: 0,
+      isHighValue: false,
+      factors: { audienceSize: 0, growthVelocity: 0, contentPerformance: 0, competitivePosition: 0 },
+      insights: ['No Recoupable data available'],
+    };
+  }
+  
+  const followers = research.audience?.totalFollowers || 0;
+  const growthRate = research.audience?.growthRate || 0;
+  const avgViralScore = research.content?.topPerformingPosts?.reduce(
+    (sum, p) => sum + (p.viralScore || 0), 0
+  ) / (research.content?.topPerformingPosts?.length || 1);
+  const hasCompetitors = (research.landscape?.similarArtists?.length || 0) > 0;
+  
+  // Score each factor 0-25
+  const audienceSizeScore = Math.min(25, (followers / 10000) * 5);
+  const growthVelocityScore = Math.min(25, growthRate);
+  const contentPerformanceScore = Math.min(25, avgViralScore / 4);
+  const competitivePositionScore = hasCompetitors ? 15 : 5;
+  
+  const totalScore = Math.round(
+    audienceSizeScore + growthVelocityScore + contentPerformanceScore + competitivePositionScore
+  );
+  
+  return {
+    totalScore,
+    isHighValue: totalScore > 60,
+    factors: {
+      audienceSize: Math.round(audienceSizeScore),
+      growthVelocity: Math.round(growthVelocityScore),
+      contentPerformance: Math.round(contentPerformanceScore),
+      competitivePosition: competitivePositionScore,
+    },
+    insights: [
+      followers > 10000 ? `Established audience: ${followers.toLocaleString()} followers` : 'Early-stage audience',
+      growthRate > 15 ? `High-growth trajectory: ${growthRate}% monthly` : 'Steady growth pattern',
+      avgViralScore > 70 ? 'Strong viral potential identified' : 'Building content momentum',
+      hasCompetitors ? 'Clear competitive positioning available' : 'Unique positioning opportunity',
+    ],
+  };
+}
+
 export const RecoupableService = {
   researchArtist,
+  researchArtistWithCache,
   generateBlueprint,
   generateContentIdeas,
+  enrichPlayerCardWithRecoupable,
+  calculateLeadScore,
   isConfigured: hasCredentials,
+  getCacheStats: () => ({ size: requestCache.size, keys: Array.from(requestCache.keys()) }),
+  clearCache: () => requestCache.clear(),
 };

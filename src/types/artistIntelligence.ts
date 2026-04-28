@@ -107,6 +107,33 @@ export interface AIAnalysis {
   growthProjection: GrowthProjection;
 }
 
+export interface RecoupableEnrichment {
+  lastSynced: Date;
+  audienceSnapshot: {
+    followers: number;
+    growthRate: number;
+    topCities: string[];
+  };
+  contentPerformance: {
+    avgEngagement: number;
+    viralScore: number;
+    bestPerformingThemes: string[];
+  };
+  competitivePosition: {
+    similarArtists: string[];
+    differentiationOpportunity: string;
+  };
+  rolloutIntelligence?: {
+    optimalReleaseDay: string;
+    contentCalendar: Array<{
+      day: number;
+      action: string;
+      platform: string;
+      contentType: string;
+    }>;
+  };
+}
+
 export interface ArtistPlayerCard {
   artistName: string;
   role: ArtistRole;
@@ -115,6 +142,7 @@ export interface ArtistPlayerCard {
   breakdown: ScoreBreakdown;
   analysis: AIAnalysis;
   submittedAt: Date;
+  recoupableEnrichment?: RecoupableEnrichment;
 }
 
 // Database storage format

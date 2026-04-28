@@ -248,6 +248,68 @@ const MOCK_PROJECTS: ProjectWorkflow[] = [
 ];
 
 // ── Components ────────────────────────────────────────────────────────────
+
+// Live Recoupable Intelligence Badge
+function LiveRecoupableStats({ artistName }: { artistName: string }) {
+  const [stats, setStats] = useState<{
+    followers: number;
+    growthRate: number;
+    lastSync: Date;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const { RecoupableService } = await import('@/lib/services/recoupable');
+        const data = await RecoupableService.researchArtistWithCache(artistName);
+        if (data?.audience) {
+          setStats({
+            followers: data.audience.totalFollowers,
+            growthRate: data.audience.growthRate,
+            lastSync: new Date(),
+          });
+        }
+      } catch (e) {
+        // Silent fail - not all projects will have Recoupable data
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    if (artistName && artistName.length > 2) {
+      fetchStats();
+    } else {
+      setLoading(false);
+    }
+  }, [artistName]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-1.5 border px-2 py-1 border-amber-500/20 bg-amber-500/5">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+        <span className="font-mono text-[8px] text-amber-500/70 tracking-[0.15em]">SYNCING...</span>
+      </div>
+    );
+  }
+
+  if (!stats) return null;
+
+  return (
+    <div className="flex items-center gap-2 border px-2 py-1 border-amber-500/30 bg-amber-500/5">
+      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+      <span className="font-mono text-[8px] text-amber-500 tracking-[0.15em]">
+        {stats.followers.toLocaleString()} FOLLOWERS
+      </span>
+      <span className={`font-mono text-[8px] ${
+        stats.growthRate > 15 ? 'text-emerald-500' : 'text-white/50'
+      }`}>
+        +{stats.growthRate}%
+      </span>
+    </div>
+  );
+}
+
 function StateBadge({ state }: { state: ReleaseState }) {
   const colors: Record<ReleaseState, string> = {
     draft: "border-border text-muted-foreground",
@@ -386,6 +448,9 @@ export default function ProjectsPage() {
                   <p className="mb-3 font-mono text-sm text-muted-foreground">
                     {project.artistName}
                   </p>
+                  <div className="mb-3">
+                    <LiveRecoupableStats artistName={project.artistName} />
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 bg-border">
                       <div

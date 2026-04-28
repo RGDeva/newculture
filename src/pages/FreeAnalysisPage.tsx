@@ -22,23 +22,23 @@ import { supabase } from "@/lib/supabase";
 const BENEFITS = [
   {
     icon: Zap,
-    title: "ROEX AI ANALYSIS",
-    desc: "Spectral analysis, loudness, dynamics, and frequency balance scoring",
+    title: "LIVE AUDIENCE DATA",
+    desc: "Real-time follower counts, growth rate, and geographic concentration",
   },
   {
     icon: Music,
-    title: "MIX FEEDBACK",
-    desc: "Specific notes on what's working and what needs attention",
+    title: "COMPETITIVE POSITION",
+    desc: "Where you stand vs. similar artists in your niche",
   },
   {
     icon: Search,
-    title: "BLUEPRINT PREVIEW",
-    desc: "Recoupable-assisted strategy snippets based on your genre + goals",
+    title: "GROWTH PROJECTION",
+    desc: "Current trajectory vs. optimized potential with action plan",
   },
   {
     icon: Lock,
-    title: "FREE + FAST",
-    desc: "Delivered via email in under 10 minutes",
+    title: "VIRAL POTENTIAL SCORE",
+    desc: "Content performance analysis and viral opportunity detection",
   },
 ];
 
@@ -83,15 +83,16 @@ export default function FreeAnalysisPage() {
               <div className="mx-auto max-w-3xl text-center">
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
                   <p className="mb-4 font-mono text-[10px] tracking-[0.4em] text-muted-foreground">
-                    // FREE LEAD MAGNET
+                    // LIVE INTELLIGENCE REPORT
                   </p>
                   <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-foreground md:text-6xl">
-                    Track Health Check.
+                    Free Audience Intelligence.
                   </h1>
                   <p className="mx-auto max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-                    Upload a track or paste a link. Our RoEx AI engine analyzes
-                    your mix and delivers a free report on quality, readiness,
-                    and improvement areas — in minutes, not days.
+                    Get a real-time breakdown of your competitive position, 
+                    audience trajectory, and growth opportunities. Powered by 
+                    our proprietary Recoupable intelligence engine — delivered 
+                    in 2 minutes, not 2 weeks.
                   </p>
                 </motion.div>
 

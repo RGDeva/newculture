@@ -16,7 +16,8 @@ import {
   ArrowUpRight,
   Sparkles,
   BarChart3,
-  Rocket
+  Rocket,
+  Activity
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -201,18 +202,33 @@ export function ArtistPlayerCardView({ card, intakeData, onShare, onDownload }: 
                 {card.tier}
               </span>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="font-mono text-xs text-white/30"
-            >
-              {card.submittedAt.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-              })}
-            </motion.div>
+            <div className="flex items-center gap-4">
+              {card.recoupableEnrichment && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.75 }}
+                  className="flex items-center gap-2 px-3 py-1 border border-amber-500/30 bg-amber-500/5"
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span className="font-mono text-[10px] text-amber-500 uppercase tracking-wider">
+                    Live Intelligence
+                  </span>
+                </motion.div>
+              )}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="font-mono text-xs text-white/30"
+              >
+                {card.submittedAt.toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })}
+              </motion.div>
+            </div>
           </div>
         </div>
 
@@ -283,6 +299,60 @@ export function ArtistPlayerCardView({ card, intakeData, onShare, onDownload }: 
             transition={{ duration: 0.5 }}
             className="grid gap-6 md:grid-cols-2"
           >
+            {/* Live Intelligence Panel */}
+            {card.recoupableEnrichment && (
+              <div className="md:col-span-2 p-6 border border-amber-500/30 bg-amber-500/5">
+                <div className="flex items-center gap-2 mb-4">
+                  <Activity className="w-4 h-4 text-amber-500" />
+                  <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-amber-500">
+                    Live Intelligence Data
+                  </h3>
+                  <span className="ml-auto font-mono text-[10px] text-white/30">
+                    Synced {new Date(card.recoupableEnrichment.lastSynced).toLocaleTimeString()}
+                  </span>
+                </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="p-4 border border-amber-500/20">
+                    <div className="font-mono text-2xl text-white mb-1">
+                      {card.recoupableEnrichment.audienceSnapshot.followers.toLocaleString()}
+                    </div>
+                    <div className="font-mono text-[10px] text-white/50 uppercase tracking-wider">
+                      Total Followers
+                    </div>
+                    <div className={`font-mono text-xs mt-1 ${
+                      card.recoupableEnrichment.audienceSnapshot.growthRate > 15 ? 'text-emerald-400' : 'text-amber-400'
+                    }`}>
+                      +{card.recoupableEnrichment.audienceSnapshot.growthRate}% monthly
+                    </div>
+                  </div>
+                  <div className="p-4 border border-amber-500/20">
+                    <div className="font-mono text-2xl text-white mb-1">
+                      {card.recoupableEnrichment.contentPerformance.viralScore}
+                    </div>
+                    <div className="font-mono text-[10px] text-white/50 uppercase tracking-wider">
+                      Viral Potential Score
+                    </div>
+                    <div className="font-mono text-xs mt-1 text-white/50">
+                      {card.recoupableEnrichment.contentPerformance.avgEngagement.toFixed(1)}% avg engagement
+                    </div>
+                  </div>
+                  <div className="p-4 border border-amber-500/20">
+                    <div className="font-mono text-lg text-white mb-1 truncate">
+                      {card.recoupableEnrichment.audienceSnapshot.topCities.slice(0, 2).join(', ')}
+                    </div>
+                    <div className="font-mono text-[10px] text-white/50 uppercase tracking-wider">
+                      Top Markets
+                    </div>
+                    {card.recoupableEnrichment.competitivePosition.similarArtists.length > 0 && (
+                      <div className="font-mono text-[10px] mt-1 text-amber-500/70 truncate">
+                        vs {card.recoupableEnrichment.competitivePosition.similarArtists[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Strategic Insight */}
             <div className="p-6 border border-white/20 bg-black">
               <div className="flex items-center gap-2 mb-4">

@@ -14,6 +14,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import type { ArtistIntakeData, ArtistPlayerCard } from '@/types/artistIntelligence';
 import { generatePlayerCard } from '@/lib/artistScoring';
+import { RecoupableService } from '@/lib/services/recoupable';
 
 type ViewState = 'landing' | 'intake' | 'processing' | 'result';
 
@@ -27,17 +28,38 @@ export default function ArtistIntelligencePage() {
     setView('intake');
   };
 
-  const handleComplete = (data: ArtistIntakeData, audioUpload: boolean) => {
+  const handleComplete = async (data: ArtistIntakeData, audioUpload: boolean) => {
     setIntakeData(data);
     setHasAudioUpload(audioUpload);
     setView('processing');
 
-    // Simulate processing delay for dramatic effect
-    setTimeout(() => {
-      const card = generatePlayerCard(data, audioUpload);
-      setPlayerCard(card);
-      setView('result');
-    }, 2000);
+    // Generate base score immediately
+    const baseCard = generatePlayerCard(data, audioUpload);
+    
+    // Parallel: Fetch Recoupable research if artist name is valid
+    const artistName = data.identity.artistName.trim();
+    const recoupablePromise = artistName.length > 2
+      ? RecoupableService.researchArtistWithCache(artistName)
+      : Promise.resolve(null);
+    
+    // Wait for both to complete (Recoupable has timeout handling)
+    const [recoupableData] = await Promise.all([
+      recoupablePromise,
+      new Promise(resolve => setTimeout(resolve, 1500)), // Minimum processing time for UX
+    ]);
+    
+    // Enrich with Recoupable data if available
+    let finalCard = baseCard;
+    if (recoupableData) {
+      const { enrichedCard } = RecoupableService.enrichPlayerCardWithRecoupable(
+        baseCard, 
+        recoupableData
+      );
+      finalCard = enrichedCard;
+    }
+    
+    setPlayerCard(finalCard);
+    setView('result');
   };
 
   const handleReset = () => {
