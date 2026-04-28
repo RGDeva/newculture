@@ -16,6 +16,7 @@ import AuditCallPage from "./pages/AuditCallPage.tsx";
 import MarketingPackagePage from "./pages/MarketingPackagePage.tsx";
 import FreeAnalysisPage from "./pages/FreeAnalysisPage.tsx";
 import VaultPage from "./pages/VaultPage.tsx";
+import ArtistIntelligencePage from "./pages/ArtistIntelligencePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/audit-call" element={<AuditCallPage />} />
           <Route path="/marketing-package" element={<MarketingPackagePage />} />
           <Route path="/free-analysis" element={<FreeAnalysisPage />} />
+          <Route path="/intelligence" element={<ArtistIntelligencePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

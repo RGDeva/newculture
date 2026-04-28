@@ -2,18 +2,19 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import {
-  Wrench, Network, Send, Menu, X, Home, Layers, FolderOpen,
+  Wrench, Network, Send, Menu, X, Home, Layers, FolderOpen, BarChart3,
 } from "lucide-react";
 import logoDark from "@/assets/logo-dark.png";
 import type { NavItem } from "@/components/ui/limelight-nav";
 
 const NAV_ITEMS: (NavItem & { href: string })[] = [
-  { id: "home",     href: "/",         icon: <Home />,        label: "Home" },
-  { id: "services", href: "/services", icon: <Layers />,      label: "Services" },
-  { id: "tools",    href: "/tools",    icon: <Wrench />,      label: "Tools" },
-  { id: "vault",    href: "/vault",    icon: <FolderOpen />,  label: "Vault" },
-  { id: "network",  href: "/network",  icon: <Network />,    label: "Network" },
-  { id: "apply",    href: "/apply",    icon: <Send />,        label: "Apply" },
+  { id: "home",         href: "/",             icon: <Home />,        label: "Home" },
+  { id: "services",     href: "/services",     icon: <Layers />,      label: "Services" },
+  { id: "tools",        href: "/tools",        icon: <Wrench />,      label: "Tools" },
+  { id: "vault",        href: "/vault",        icon: <FolderOpen />,  label: "Vault" },
+  { id: "network",      href: "/network",      icon: <Network />,    label: "Network" },
+  { id: "intelligence", href: "/intelligence", icon: <BarChart3 />,  label: "Intelligence" },
+  { id: "apply",        href: "/apply",        icon: <Send />,        label: "Apply" },
 ];
 
 export function Navbar() {
