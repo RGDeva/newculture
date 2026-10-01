@@ -1,17 +1,18 @@
 "use client";
 
-import type { TargetAndTransition } from "framer-motion";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const initialProps: TargetAndTransition = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const initialProps: any = {
   pathLength: 0,
   opacity: 0,
   scale: 0.7,
   rotateY: -15,
 };
 
-const animateProps: TargetAndTransition = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const animateProps: any = {
   pathLength: 1,
   opacity: 1,
   scale: 1,

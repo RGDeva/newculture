@@ -74,7 +74,7 @@ export async function generateServiceBlueprint(
     // 2. Generate blueprint via Recoupable API
     const blueprintResponse = await RecoupableService.generateBlueprint({
       artistName: context.artistName,
-      genre: context.genre,
+      genre: context.genre ? [context.genre] : [],
       currentFollowers: recoupableData.audience?.totalFollowers || context.currentFollowers,
       goals: context.goals,
       budgetRange: context.budget,
@@ -94,7 +94,7 @@ export async function generateServiceBlueprint(
         context.artistName,
         5
       );
-      contentIdeas = ideas?.map(i => i.concept) || [];
+      contentIdeas = ideas?.map(i => i.hook) || [];
     }
 
     // 4. Enrich blueprint based on service tier
@@ -196,6 +196,7 @@ function enrichForServiceTier(
         'Book regional tour based on top cities',
         'Establish sync licensing pipeline',
       ],
+      contentIdeas: [],
     });
   }
 

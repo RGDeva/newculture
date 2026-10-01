@@ -69,7 +69,7 @@ const CustomControls: React.FC<CustomControlsProps> = ({ onLocate, onToggleLayer
   const map = useMap();
 
   useEffect(() => {
-    const control = L.control({ position: 'topright' });
+    const control = new L.Control({ position: 'topright' });
 
     control.onAdd = () => {
       const div = L.DomUtil.create('div', 'custom-controls');
@@ -106,7 +106,7 @@ const SearchControl: React.FC<SearchControlProps> = ({ onSearch }) => {
   const map = useMap();
 
   useEffect(() => {
-    const control = L.control({ position: 'topleft' });
+    const control = new L.Control({ position: 'topleft' });
     let queryValue = '';
 
     const handleSearch = async () => {
@@ -303,7 +303,7 @@ export const AdvancedMap: React.FC<AdvancedMapProps> = ({
           />
         )}
 
-        <MapEvents onMapClick={handleMapClick} onLocationFound={setUserLocation} />
+        <MapEvents onMapClick={handleMapClick} onLocationFound={(ll) => setUserLocation([ll.lat, ll.lng])} />
         {enableSearch && <SearchControl onSearch={handleSearch} />}
         {enableControls && <CustomControls onLocate={handleLocate} onToggleLayer={handleToggleLayer} />}
 

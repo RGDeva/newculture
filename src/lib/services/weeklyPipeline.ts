@@ -61,13 +61,13 @@ export async function generateWeeklyContent(
     // 3. Enrich with performance predictions
     const enrichedIdeas: ContentIdea[] = rawIdeas.map((idea, index) => ({
       id: `ci_${Date.now()}_${index}`,
-      concept: idea.concept,
+      concept: idea.hook,
       platform: idea.platform,
-      contentType: idea.contentType,
+      contentType: 'video',
       estimatedEngagement: predictEngagement(idea, recoupableData),
-      timing: idea.timing,
-      viralPotential: idea.viralPotential,
-      tags: idea.tags,
+      timing: idea.format,
+      viralPotential: idea.expectedEngagement === 'high' ? 80 : idea.expectedEngagement === 'medium' ? 50 : 20,
+      tags: [idea.format],
     }));
 
     // 4. Sort by viral potential
