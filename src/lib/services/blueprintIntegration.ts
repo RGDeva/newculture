@@ -74,7 +74,7 @@ export async function generateServiceBlueprint(
     // 2. Generate blueprint via Recoupable API
     const blueprintResponse = await RecoupableService.generateBlueprint({
       artistName: context.artistName,
-      genre: Array.isArray(context.genre) ? context.genre : [context.genre],
+      genre: context.genre ? [context.genre] : [],
       currentFollowers: recoupableData.audience?.totalFollowers || context.currentFollowers,
       goals: context.goals,
       budgetRange: context.budget,
