@@ -94,7 +94,7 @@ export async function generateServiceBlueprint(
         context.artistName,
         5
       );
-      contentIdeas = ideas?.map(i => i.concept) || [];
+      contentIdeas = ideas?.map(i => i.hook) || [];
     }
 
     // 4. Enrich blueprint based on service tier
